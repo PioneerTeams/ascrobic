@@ -72,6 +72,8 @@
   </div>
 </template>
 <script>
+import qs from 'querystring'
+import request from '@/utils/request'
 export default {
   data() {
     return {
@@ -198,12 +200,31 @@ export default {
       ]
     }
   },
+  mounted() {
+    this.getSubList()
+  },
   methods: {
     handleSelect(key, keyPath) {
       console.log(key, keyPath, 'l')
     },
     submit() {
       console.log(this.form, 'this.form')
+    },
+    async getSubList() {
+      const data = {
+        org_id: 61500,
+        org_type: 5,
+        status: ''
+      }
+      const result = await request({
+        url: '/order/get-order-search',
+        baseURL: '/api',
+        method: 'post',
+        headers: { 'content-type': 'application/x-www-form-urlencoded' },
+        data: qs.stringify(data)
+      })
+      console.log(result, 'pppppp')
+      return result
     }
   }
 }
