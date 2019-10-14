@@ -1,129 +1,127 @@
 <template>
   <div class="app-container">
-      <div class="manger">
-          <h3>商品管理</h3>
-          <div class="options-active">
-              <div class="batch-btn">
-                <i class="el-icon-download"></i>批量上传
-              </div>
-              <div class="batch-btn">
-                <i class="el-icon-download"></i>批量导出
-              </div>
-              <div class="batch-btn">
-                <i class="el-icon-document-delete"></i>查看已生成报表
-              </div>
-          </div>
+    <div class="manger">
+      <h3>商品管理</h3>
+      <div class="options-active">
+        <div class="batch-btn">
+          <i class="el-icon-download" />批量上传
+        </div>
+        <div class="batch-btn">
+          <i class="el-icon-download" />批量导出
+        </div>
+        <div class="batch-btn">
+          <i class="el-icon-document-delete" />查看已生成报表
+        </div>
       </div>
-      <div class="tab-form">
-          <el-tabs v-model="activeName" @tab-click="handleClick" class="nav-selected">
-            <el-tab-pane label="销售中" name="first">销售中</el-tab-pane>
-            <el-tab-pane label="仓库中" name="second">仓库中</el-tab-pane>
-            <el-tab-pane label="草稿箱" name="third">草稿箱</el-tab-pane>
-            <el-tab-pane label="待审核" name="fourth">待审核</el-tab-pane>
-            <el-tab-pane label="未通过审核" name="sixth">未通过审核</el-tab-pane>
-          </el-tabs>
-          <div class="card-group">
-              <el-form :inline="true" :model="formInline" class="demo-form-inline" label-width="80px">
-                <el-form-item label="款号:">
-                  <el-input v-model="formInline.styleNum" placeholder="请输入"></el-input>
-                </el-form-item>
-                <el-form-item label="商品名称:">
-                  <el-input v-model="formInline.shopName" placeholder="请输入"></el-input>
-                </el-form-item>
-                <el-form-item label="分类:">
-                  <el-select v-model="formInline.list" filterable placeholder="请选择">
-                    <el-option-group v-for="group in formSelect.category" :key="group.id" :label="group.title">
-                      <el-option  v-for="item in group.children" :key="item.id" :label="item.title" :value="item.title">
-                      </el-option>
-                    </el-option-group>
-                  </el-select>
-                </el-form-item>
-                <el-form-item label="品牌:">
-                  <el-select v-model="formInline.brand" placeholder="请选择">
-                    <el-option v-for="item in formSelect.brand" :key="item.id" :label="item.name" :value="item.name"></el-option>
-                  </el-select>
-                </el-form-item>
-                <el-form-item label="商品来源:">
-                  <el-select v-model="formInline.source" placeholder="请选择">
-                    <el-option v-for="item in formSelect.source" :key="item.id" :label="item.name" :value="item.name"></el-option>
-                    <el-option label="区域二" value="beijing"></el-option>
-                  </el-select>
-                </el-form-item>
-                <el-form-item label="商品类型:">
-                  <el-select v-model="formInline.types" placeholder="请选择">
-                    <el-option v-for="item in formSelect.product_type" :key="item.id" :label="item.name" :value="item.name"></el-option>
-                  </el-select>
-                </el-form-item>
-                <el-form-item label="配送方式:">
-                  <el-select v-model="formInline.dispatching" placeholder="请选择">
-                    <el-option v-for="item in formSelect.delivery" :key="item.id" :label="item.name" :value="item.name"></el-option>
-                  </el-select>
-                </el-form-item>
-                <el-form-item label="店铺:">
-                  <el-select v-model="formInline.store" placeholder="请选择">
-                    <el-option-group v-for="group in formSelect.store" :key="group.id" :label="group.title">
-                      <el-option  v-for="item in group.children" :key="item.id" :label="item.title" :value="item.title">
-                      </el-option>
-                    </el-option-group>
-                  </el-select>
-                </el-form-item>
-                <el-form-item label="上架时间:">
-                  <el-date-picker
-                    v-model="formInline.value"
-                    type="daterange"
-                    range-separator="-"
-                    start-placeholder="开始日期"
-                    end-placeholder="结束日期">
-                  </el-date-picker>
-                </el-form-item>
-                <el-form-item class="last-formItem">
-                  <el-button type="primary" @click="onSubmit">查询</el-button>
-                  <el-button @click="resetForm('formInline')">重置</el-button>
-                </el-form-item>
-              </el-form>
-          </div>
+    </div>
+    <div class="tab-form">
+      <div class="nav-selected">
+        <span class="nav-active">销售中</span>
+        <span>仓库中</span>
+        <span>草稿箱</span>
+        <span>待审核</span>
+        <span>未通过审核</span>
       </div>
-      <div class="table-content">
-          <div class="btn-add">+</div>
-          <div class="table-wrap">
-            <el-table
-              :data="tableData"
-              style="width: 100%"
-              row-key="id"
-              :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
-              <el-table-column prop="date" label="主图" type="selection">
-              </el-table-column>
-              <el-table-column prop="name" label="商品名称" >
-              </el-table-column>
-              <el-table-column prop="province" label="品牌价">
-              </el-table-column>
-              <el-table-column prop="city" label="库存">
-              </el-table-column>
-              <el-table-column prop="address" label="分类">
-              </el-table-column>
-              <el-table-column prop="zip" label="品牌">
-              </el-table-column>
-              <el-table-column label="操作">
-                <template slot-scope="scope">
-                  <el-button
-                    size="mini"
-                    type="danger"
-                    @click="handleDelete(scope.$index, scope.row)">查看</el-button>
-                  <el-button
-                    size="mini"
-                    @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-          </div>
-          <div class="paging">
-            <el-pagination
-              background
-              layout="total, prev, pager, next"
-              :total="1000">
-            </el-pagination>
-          </div>
+      <div class="card-group">
+        <el-form :inline="true" :model="formInline" class="demo-form-inline" label-width="80px">
+          <el-form-item label="款号:">
+            <el-input v-model="formInline.styleNum" placeholder="请输入" />
+          </el-form-item>
+          <el-form-item label="商品名称:">
+            <el-input v-model="formInline.shopName" placeholder="请输入" />
+          </el-form-item>
+          <el-form-item label="分类:">
+            <el-select v-model="formInline.list" filterable placeholder="请选择">
+              <el-option-group v-for="group in options" :key="group.label" :label="group.label">
+                <el-option v-for="item in group.options" :key="item.value" :label="item.label" :value="item.value" />
+              </el-option-group>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="品牌:">
+            <el-select v-model="formInline.brand" placeholder="请选择">
+              <el-option label="区域一" value="shanghai" />
+              <el-option label="区域二" value="beijing" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="商品来源:">
+            <el-select v-model="formInline.source" placeholder="请选择">
+              <el-option label="区域一" value="shanghai" />
+              <el-option label="区域二" value="beijing" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="商品类型:">
+            <el-select v-model="formInline.types" placeholder="请选择">
+              <el-option label="区域一" value="shanghai" />
+              <el-option label="区域二" value="beijing" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="配送方式:">
+            <el-select v-model="formInline.dispatching" placeholder="请选择">
+              <el-option label="区域一" value="shanghai" />
+              <el-option label="区域二" value="beijing" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="店铺:">
+            <el-select v-model="formInline.store" placeholder="请选择">
+              <el-option-group v-for="group in options" :key="group.label" :label="group.label">
+                <el-option v-for="item in group.options" :key="item.value" :label="item.label" :value="item.value" />
+              </el-option-group>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="上架时间:">
+            <el-date-picker
+              v-model="formInline.value"
+              type="daterange"
+              range-separator="-"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+            />
+          </el-form-item>
+          <el-form-item class="last-formItem">
+            <el-button type="primary" @click="onSubmit">查询</el-button>
+            <el-button @click="resetForm('formInline')">重置</el-button>
+          </el-form-item>
+        </el-form>
       </div>
+    </div>
+    <div class="table-content">
+      <div class="btn-add">+</div>
+      <div class="table-wrap">
+        <el-table
+          :data="tableData"
+          style="width: 100%"
+          row-key="id"
+          :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+        >
+          <el-table-column prop="date" label="主图" type="selection" />
+          <el-table-column prop="name" label="商品名称" />
+          <el-table-column prop="province" label="品牌价" />
+          <el-table-column prop="city" label="库存" />
+          <el-table-column prop="address" label="分类" />
+          <el-table-column prop="zip" label="品牌" />
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                type="danger"
+                @click="handleDelete(scope.$index, scope.row)"
+              >查看</el-button>
+              <el-button
+                size="mini"
+                @click="handleEdit(scope.$index, scope.row)"
+              >编辑</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <div class="paging">
+        <el-pagination
+          background
+          layout="total, prev, pager, next"
+          :total="1000"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -137,122 +135,122 @@ export default {
       activeName: 'first',
       formSelect:{},
       formInline: {
-        styleNum:'',
+        styleNum: '',
         shopName: '',
-        list:'',
-        brand:'',
-        source:'',
-        types:'',
-        dispatching:'',
-        store:'',
-        putaway:'',
-        value:''
+        list: '',
+        brand: '',
+        source: '',
+        types: '',
+        dispatching: '',
+        store: '',
+        putaway: '',
+        value: ''
       },
       options: [{
         label: '热门城市',
         options: [{
-            value: 'Shanghai',
-            label: '上海'
-          }, {
-            value: 'Beijing',
-            label: '北京'
-          }]
+          value: 'Shanghai',
+          label: '上海'
         }, {
+          value: 'Beijing',
+          label: '北京'
+        }]
+      }, {
         label: '城市名',
         options: [{
-            value: 'Chengdu',
-            label: '成都'
-          }, {
-            value: 'Shenzhen',
-            label: '深圳'
-          }, {
-            value: 'Guangzhou',
-            label: '广州'
-          }, {
-            value: 'Dalian',
-            label: '大连'
-          }]
-        },{
-        label: '123',
+          value: 'Chengdu',
+          label: '成都'
+        }, {
+          value: 'Shenzhen',
+          label: '深圳'
+        }, {
+          value: 'Guangzhou',
+          label: '广州'
+        }, {
+          value: 'Dalian',
+          label: '大连'
+        }]
+      }, {
+        label: '',
         options: [{
           value: 'Chengdu',
           label: '成都'
         }]
       }],
       tableData: [{
-         id:1,
-         date: '2016-05-03',
-         name: '王小虎',
-         province: '上海',
-         city: '普陀区',
-         address: '上海市普陀区金沙江路 1518 弄',
-         zip: 200333,
-         operate:''
-       }, {
-         id:2,
-         date: '2016-05-02',
-         name: '王小虎',
-         province: '上海',
-         city: '普陀区',
-         address: '上海市普陀区金沙江路 1518 弄',
-         zip: 200333
-       }, {
-         id:3,
-         date: '2016-05-04',
-         name: '王小虎',
-         province: '上海',
-         city: '普陀区',
-         address: '上海市普陀区金沙江路 1518 弄',
-         zip: 200333,
-         children: [{
-             id: 31,
-             date: '2016-05-04',
-             name: '王小虎',
-             province: '上海',
-             city: '普陀区',
-             address: '上海市普陀区金沙江路 1518 弄',
-             zip: 200333
-           }, {
-             id: 32,
-             date: '2016-05-01',
-             name: '王小虎',
-             province: '上海',
-             city: '普陀区',
-             address: '上海市普陀区金沙江路 1518 弄',
-             zip: 200333
-         }]
-       }, {
-         id:4,
-         date: '2016-05-01',
-         name: '王小虎',
-         province: '上海',
-         city: '普陀区',
-         address: '上海市普陀区金沙江路 1518 弄',
-         zip: 200333
-       }, {
-         id:5,
-         date: '2016-05-08',
-         name: '王小虎',
-         province: '上海',
-         city: '普陀区',
-         address: '上海市普陀区金沙江路 1518 弄',
-         zip: 200333
-       }, {
-         id:6,
-         date: '2016-05-06',
-         name: '王小虎',
-         province: '上海',
-         city: '普陀区',
-         address: '上海市普陀区金沙江路 1518 弄',
-         zip: 200333
-       }, {
-         id:7,
-         date: '2016-05-07',
-         name: '王小虎',
-         province: '上海',
-         city: '普陀区',
-         address: '上海市普陀区金沙江路 1518 弄',
-         zip: 200333
+        id: 1,
+        date: '2016-05-03',
+        name: '王小虎',
+        province: '上海',
+        city: '普陀区',
+        address: '上海市普陀区金沙江路 1518 弄',
+        zip: 200333,
+        operate: ''
+      }, {
+        id: 2,
+        date: '2016-05-02',
+        name: '王小虎',
+        province: '上海',
+        city: '普陀区',
+        address: '上海市普陀区金沙江路 1518 弄',
+        zip: 200333
+      }, {
+        id: 3,
+        date: '2016-05-04',
+        name: '王小虎',
+        province: '上海',
+        city: '普陀区',
+        address: '上海市普陀区金沙江路 1518 弄',
+        zip: 200333,
+        children: [{
+          id: 31,
+          date: '2016-05-04',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }, {
+          id: 32,
+          date: '2016-05-01',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }]
+      }, {
+        id: 4,
+        date: '2016-05-01',
+        name: '王小虎',
+        province: '上海',
+        city: '普陀区',
+        address: '上海市普陀区金沙江路 1518 弄',
+        zip: 200333
+      }, {
+        id: 5,
+        date: '2016-05-08',
+        name: '王小虎',
+        province: '上海',
+        city: '普陀区',
+        address: '上海市普陀区金沙江路 1518 弄',
+        zip: 200333
+      }, {
+        id: 6,
+        date: '2016-05-06',
+        name: '王小虎',
+        province: '上海',
+        city: '普陀区',
+        address: '上海市普陀区金沙江路 1518 弄',
+        zip: 200333
+      }, {
+        id: 7,
+        date: '2016-05-07',
+        name: '王小虎',
+        province: '上海',
+        city: '普陀区',
+        address: '上海市普陀区金沙江路 1518 弄',
+        zip: 200333
       }]
     }
   },
@@ -267,19 +265,16 @@ export default {
       })
     },
     onSubmit() {
-      console.log('submit!');
+      console.log('submit!')
     },
     resetForm(formName) {
-      this.$refs[formName].resetFields();
+      this.$refs[formName].resetFields()
     },
     handleEdit(index, row) {
-      console.log(index, row);
+      console.log(index, row)
     },
     handleDelete(index, row) {
-      console.log(index, row);
-    },
-    handleClick(tab, event) {
-      console.log(tab, event);
+      console.log(index, row)
     }
   }
 }
@@ -297,7 +292,7 @@ export default {
     background-color: #fff;
     padding: 24px;
     h3{
-        padding-bottom: 24px;      
+        padding-bottom: 24px;
     }
     .options-active{
         font-size: 14px;
