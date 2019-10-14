@@ -75,36 +75,36 @@
 export default {
   data() {
     return {
-      activeIndex: 1,
-      activeIndex2: 1,
+      activeIndex: '1',
+      activeIndex2: '1',
       navList: [
         {
           title: '全部',
-          id: 1
+          id: '1'
         },
         {
           title: '待商家处理',
-          id: 2
+          id: '2'
         },
         {
           title: '待买家处理',
-          id: 3
+          id: '3'
         },
         {
           title: '待审核',
-          id: 4
+          id: '4'
         },
         {
           title: '待财务确认',
-          id: 5
+          id: '5'
         },
         {
           title: '退款成功',
-          id: 6
+          id: '6'
         },
         {
           title: '退款关闭',
-          id: 7
+          id: '7'
         }
       ],
       form: {
@@ -199,6 +199,9 @@ export default {
     },
     submit() {
       console.log(this.form, 'this.form')
+    },
+    reset() {
+
     }
   }
 }
