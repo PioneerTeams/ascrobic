@@ -85,18 +85,18 @@ export const constantRoutes = [
       }
     ]
   },
-  {
-    path: '/documentation',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/documentation/index'),
-        name: 'Documentation',
-        meta: { title: '概况', icon: 'chart', affix: true }
-      }
-    ]
-  }
+  // {
+  //   path: '/documentation',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/documentation/index'),
+  //       name: 'Documentation',
+  //       meta: { title: '概况', icon: 'chart', affix: true }
+  //     }
+  //   ]
+  // }
   // {
   //   path: '/guide',
   //   component: Layout,
@@ -134,30 +134,29 @@ export const asyncRoutes = [
   {
     path: '/permission',
     component: Layout,
-    redirect: '/permission/page',
     alwaysShow: true, // will always show the root menu
     name: 'Permission',
     meta: {
       title: '店铺',
       icon: 'lock',
-      roles: ['admin', 'editor'] // you can set roles in root nav
+      // roles: ['admin', 'editor'] // you can set roles in root nav
     },
     children: [
-      {
-        path: 'page',
-        component: () => import('@/views/permission/page'),
-        name: 'PagePermission',
-        meta: {
-          title: '店铺管理',
-          roles: ['admin'] // or you can only set roles in sub nav
-        }
-      },
+      // {
+      //   path: 'page',
+      //   component: () => import('@/views/permission/page'),
+      //   name: 'PagePermission',
+      //   meta: {
+      //     title: '店铺管理',
+      //     roles: ['admin'] // or you can only set roles in sub nav
+      //   }
+      // },
       {
         path: 'directive',
         component: () => import('@/views/permission/directive'),
         name: 'DirectivePermission',
         meta: {
-          title: '专柜导航管理'
+          title: '店铺管理'
           // if do not set roles, means: this page does not require permission
         }
       }
@@ -210,7 +209,6 @@ export const asyncRoutes = [
   {
     path: '/zip',
     component: Layout,
-    redirect: '/zip/download',
     alwaysShow: true,
     name: 'Zip',
     meta: { title: '顾客', icon: 'form' },
@@ -230,7 +228,6 @@ export const asyncRoutes = [
   {
     path: '/example',
     component: Layout,
-    redirect: '/example/list',
     name: 'Example',
     meta: {
       title: '团队',
@@ -416,7 +413,7 @@ export const asyncRoutes = [
   // },
 
   // // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  // { path: '*', redirect: '/404', hidden: true }
 ]
 
 const createRouter = () => new Router({
