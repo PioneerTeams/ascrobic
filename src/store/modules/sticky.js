@@ -1,19 +1,40 @@
-import { getFloorListRequest } from '@/api/sticky'
+import { getFloorListRequest, getcateGoryList, getTableList } from '@/api/sticky'
 
 const state = {
-  floorList: []
+  floorList: [],
+  cateGoryList: [],
+  tableList: []
 }
 
 const mutations = {
   setFloorList(state, payload) {
+    console.log(payload)
     state.floorList = payload
+  },
+  setCateGoryList(state, payload) {
+    console.log(payload)
+    state.cateGoryList = payload
+  },
+  setTableList(state, payload) {
+    state.tableList = payload
   }
 }
 
 const actions = {
   async  getFloorList({ commit }) {
     const result = await getFloorListRequest()
-    console.log(result)
+    const data = result.data.list
+    commit('setFloorList', data)
+  },
+  async getCateGoryList({ commit }) {
+    const result = await getcateGoryList()
+    const data = result.data
+    commit('setCateGoryList', data)
+  },
+  async getTableList({ commit }, params) {
+    const result = await getTableList(params)
+    const data = result.data.list
+    commit('setTableList', data)
   }
 }
 

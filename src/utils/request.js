@@ -50,11 +50,7 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data
-<<<<<<< HEAD
-    if(res.code==200){
-=======
     if (res.code === 200) {
->>>>>>> e2f8e6ee0c0d5513d8b4641519220dcb9fcf8a89
       return res
     }
     // if the custom code is not 20000, it is judged as an error.
