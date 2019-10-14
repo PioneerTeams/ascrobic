@@ -47,10 +47,10 @@ module.exports = {
         }
       },
       '/api':{
-        target: "https://betapartnerapi.weitaming.com",
+        target:' https://betapartnerapi.weitaming.com',
         changeOrigin: true,
-        pathRewrite: {
-          '/api': ''
+        pathRewrite:{
+          '/api':''
         }
       }
     },
