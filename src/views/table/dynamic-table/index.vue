@@ -15,13 +15,13 @@
           </div>
       </div>
       <div class="tab-form">
-          <div class="nav-selected">
-              <span class="nav-active">销售中</span>
-              <span>仓库中</span>
-              <span>草稿箱</span>
-              <span>待审核</span>
-              <span>未通过审核</span>
-          </div>
+          <el-tabs v-model="activeName" @tab-click="handleClick" class="nav-selected">
+            <el-tab-pane label="销售中" name="first">销售中</el-tab-pane>
+            <el-tab-pane label="仓库中" name="second">仓库中</el-tab-pane>
+            <el-tab-pane label="草稿箱" name="third">草稿箱</el-tab-pane>
+            <el-tab-pane label="待审核" name="fourth">待审核</el-tab-pane>
+            <el-tab-pane label="未通过审核" name="sixth">未通过审核</el-tab-pane>
+          </el-tabs>
           <div class="card-group">
               <el-form :inline="true" :model="formInline" class="demo-form-inline" label-width="80px">
                 <el-form-item label="款号:">
@@ -32,40 +32,37 @@
                 </el-form-item>
                 <el-form-item label="分类:">
                   <el-select v-model="formInline.list" filterable placeholder="请选择">
-                    <el-option-group v-for="group in options" :key="group.label" :label="group.label">
-                      <el-option  v-for="item in group.options" :key="item.value" :label="item.label" :value="item.value">
+                    <el-option-group v-for="group in formSelect.category" :key="group.id" :label="group.title">
+                      <el-option  v-for="item in group.children" :key="item.id" :label="item.title" :value="item.title">
                       </el-option>
                     </el-option-group>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="品牌:">
                   <el-select v-model="formInline.brand" placeholder="请选择">
-                    <el-option label="区域一" value="shanghai"></el-option>
-                    <el-option label="区域二" value="beijing"></el-option>
+                    <el-option v-for="item in formSelect.brand" :key="item.id" :label="item.name" :value="item.name"></el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="商品来源:">
                   <el-select v-model="formInline.source" placeholder="请选择">
-                    <el-option label="区域一" value="shanghai"></el-option>
+                    <el-option v-for="item in formSelect.source" :key="item.id" :label="item.name" :value="item.name"></el-option>
                     <el-option label="区域二" value="beijing"></el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="商品类型:">
                   <el-select v-model="formInline.types" placeholder="请选择">
-                    <el-option label="区域一" value="shanghai"></el-option>
-                    <el-option label="区域二" value="beijing"></el-option>
+                    <el-option v-for="item in formSelect.product_type" :key="item.id" :label="item.name" :value="item.name"></el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="配送方式:">
                   <el-select v-model="formInline.dispatching" placeholder="请选择">
-                    <el-option label="区域一" value="shanghai"></el-option>
-                    <el-option label="区域二" value="beijing"></el-option>
+                    <el-option v-for="item in formSelect.delivery" :key="item.id" :label="item.name" :value="item.name"></el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="店铺:">
                   <el-select v-model="formInline.store" placeholder="请选择">
-                    <el-option-group v-for="group in options" :key="group.label" :label="group.label">
-                      <el-option  v-for="item in group.options" :key="item.value" :label="item.label" :value="item.value">
+                    <el-option-group v-for="group in formSelect.store" :key="group.id" :label="group.title">
+                      <el-option  v-for="item in group.children" :key="item.id" :label="item.title" :value="item.title">
                       </el-option>
                     </el-option-group>
                   </el-select>
@@ -131,11 +128,14 @@
 </template>
 
 <script>
+import { manageList } from '@/api/commodity'
 
 export default {
   name: 'DynamicTable',
   data() {
     return {
+      activeName: 'first',
+      formSelect:{},
       formInline: {
         styleNum:'',
         shopName: '',
@@ -173,7 +173,7 @@ export default {
             label: '大连'
           }]
         },{
-        label: '',
+        label: '123',
         options: [{
           value: 'Chengdu',
           label: '成都'
@@ -256,7 +256,16 @@ export default {
       }]
     }
   },
+  mounted() {
+    this.getlist()
+  },
   methods: {
+    getlist(){
+      manageList().then(res=>{
+        this.formSelect=res.data
+        console.log(this.formSelect)
+      })
+    },
     onSubmit() {
       console.log('submit!');
     },
@@ -268,6 +277,9 @@ export default {
     },
     handleDelete(index, row) {
       console.log(index, row);
+    },
+    handleClick(tab, event) {
+      console.log(tab, event);
     }
   }
 }
@@ -301,24 +313,34 @@ export default {
   }
   .tab-form{
     margin-top: 24px;
-    padding-top: 24px;
+    padding: 24px;
     background-color: #fff;
-    .nav-selected{
-      border-bottom: 1px solid #e8e8e8;
-      span{
-        display: inline-block;
-        box-sizing: content-box;
-        padding: 5px 5px 10px;
-        margin: 0 24px;
-        font-size: 14px;
-        text-align: center;
-        line-height: 22px;
-        cursor: pointer;
-      }
-      .nav-active{
-        color: #3ec6b6;
-        border-bottom: 2px solid #3ec6b6;
-      }
+    // .nav-selected{
+    //   border-bottom: 1px solid #e8e8e8;
+    //   span{
+    //     display: inline-block;
+    //     box-sizing: content-box;
+    //     padding: 5px 5px 10px;
+    //     margin: 0 24px;
+    //     font-size: 14px;
+    //     text-align: center;
+    //     line-height: 22px;
+    //     cursor: pointer;
+    //   }
+    //   .nav-active{
+    //     color: #3ec6b6;
+    //     border-bottom: 2px solid #3ec6b6;
+    //   }
+    // }
+
+    .nav-selected /deep/ .el-tabs__active-bar{
+      background-color: #3ec6b6;
+    }
+    .nav-selected /deep/ .el-tabs__item.is-active {
+      color: #3ec6b6;
+    }
+    .nav-selected /deep/ .el-tabs__item:hover{
+      color: #3ec6b6;
     }
     .card-group{
       padding: 24px;

@@ -142,24 +142,24 @@ export const asyncRoutes = [
       // roles: ['admin', 'editor'] // you can set roles in root nav
     },
     children: [
-      // {
-      //   path: 'page',
-      //   component: () => import('@/views/permission/page'),
-      //   name: 'PagePermission',
-      //   meta: {
-      //     title: '店铺管理',
-      //     roles: ['admin'] // or you can only set roles in sub nav
-      //   }
-      // },
       {
-        path: 'directive',
-        component: () => import('@/views/permission/directive'),
-        name: 'DirectivePermission',
+        path: 'page',
+        component: () => import('@/views/permission/page'),
+        name: 'PagePermission',
         meta: {
-          title: '店铺管理'
-          // if do not set roles, means: this page does not require permission
+          title: '店铺管理',
+          roles: ['admin'] // or you can only set roles in sub nav
         }
-      }
+      },
+      // {
+      //   path: 'directive',
+      //   component: () => import('@/views/permission/directive'),
+      //   name: 'DirectivePermission',
+      //   meta: {
+      //     title: '店铺管理'
+      //     // if do not set roles, means: this page does not require permission
+      //   }
+      // }
       // {
       //   path: 'role',
       //   component: () => import('@/views/permission/role'),
