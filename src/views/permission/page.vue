@@ -4,6 +4,7 @@
       <div class="managementhead">导购管理</div>
       <el-tabs v-model="activeName" class="managetabs" @tab-click="handleClick">
         <el-tab-pane label="导购管理" name="first">
+
           <div class="mangeFrom">
             <el-form ref="formInline" :inline="true" :model="formInline" class="demo-form-inline">
               <el-form-item label="店铺名">
@@ -40,8 +41,51 @@
               </el-table-column>
             </el-table>
           </div>
+          <el-pagination background layout="prev, pager, next" :total="1" />
+
         </el-tab-pane>
-        <el-tab-pane label="角色描述" name="second" />
+        <el-tab-pane label="角色描述" name="second">
+          <div class="mangeFrom">
+            <el-form ref="formInline" :inline="true" :model="formE" class="demo-form-inline">
+              <el-form-item label="店铺名">
+                <el-input v-model="formE.design" placeholder="请输入店铺名" />
+              </el-form-item>
+              <el-form-item label="店铺权限">
+                <el-select v-model="formE.quanxian" placeholder="请选择">
+                  <el-option label="f1" value="f1" />
+                  <el-option label="f2" value="f2" />
+                </el-select>
+              </el-form-item>
+              <el-form-item label="授权品牌">
+                <el-select v-model="formE.pinpai" placeholder="请选择">
+                  <el-option label="f1" value="f1" />
+                  <el-option label="f2" value="f2" />
+                </el-select>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="onSubmit">查询</el-button>
+              </el-form-item>
+              <el-form-item>
+                <el-button @click="onReset('formE')">重置</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
+          <div class="mangeTable">
+            <el-table :data="tableData" style="width: 100%">
+              <el-table-column prop="name" label="店铺名称" width="120" />
+              <el-table-column prop="floor_name" label="楼层" width="120" />
+              <el-table-column prop="address" label="位置" width="120" />
+              <el-table-column prop="category_data" label="所属分类" width="120" />
+              <el-table-column prop="shop_manager" label="店长" />
+              <el-table-column prop="building" label="楼管" width="180" />
+              <el-table-column prop="status_str" label="状态" width="120" />
+              <el-table-column prop="address" label="操作" width="120">
+                <el-button type="text" size="small" @cell-click="goDetail">查看</el-button>
+              </el-table-column>
+            </el-table>
+          </div>
+          <el-pagination background layout="prev, pager, next" :total="1" />
+        </el-tab-pane>
       </el-tabs>
     </div>
   </div>
@@ -57,6 +101,11 @@ export default {
         design: '',
         floor: '',
         classification: ''
+      },
+      formE: {
+        design: '',
+        quanxian: '',
+        pinpai: ''
       },
       tableData: [
         {
