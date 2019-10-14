@@ -30,9 +30,9 @@
       </el-form>
     </div>
     <div class="mangeTable">
-      <el-table :data="tableData" style="width: 100%" :header-row-style="{'background':'#fafafa'}">
-        <el-table-column prop="name" label="店铺名称" width="120">店铺名称</el-table-column>
-        <el-table-column prop="floor_name" label="楼层" width="120">1</el-table-column>
+      <el-table :data="tableData" style="width: 100%" @cell-click="goDetail">
+        <el-table-column prop="name" label="店铺名称" width="120" />
+        <el-table-column prop="floor_name" label="楼层" width="120" />
         <el-table-column prop="address" label="位置" width="120" />
         <el-table-column prop="category_data" label="所属分类" width="120" />
         <el-table-column prop="shop_manager" label="店长" />
@@ -65,6 +65,16 @@ export default {
           building: '楼管,宋凯',
           status_str: '有效',
           id: 43529
+        },
+        {
+          name: '拿美店仓',
+          floor_name: 'F4',
+          address: '4楼',
+          category_data: ['女装'],
+          shop_manager: '迎春,刘小哥,红杰,17600665361,15822294356',
+          building: '楼管,宋凯',
+          status_str: '有效',
+          id: 43528
         }
       ]
     }
@@ -76,16 +86,16 @@ export default {
   mounted() {},
   methods: {
     handleClick(tab, event) {
-      console.log(tab, event)
-      console.log(event.target)
+
     },
-    onSubmit() {
-      console.log('submit!')
-    },
+    onSubmit() {},
     onReset(rulesFrom) {
       console.log(rulesFrom)
       console.log(this.$refs)
       this.$refs[rulesFrom].resetFields()
+    },
+    goDetail(row, column, cell, event) {
+      console.log(row.id)
     }
   }
 }
