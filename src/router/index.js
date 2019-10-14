@@ -10,7 +10,6 @@ import Layout from '@/layout'
 import componentsRouter from './modules/components'
 import chartsRouter from './modules/charts'
 import tableRouter from './modules/table'
-import nestedRouter from './modules/nested'
 import marketing from './modules/marketing'
 import setting from './modules/setting'
 
@@ -84,7 +83,7 @@ export const constantRoutes = [
         meta: { title: '首页', icon: 'dashboard', affix: true }
       }
     ]
-  },
+  }
   // {
   //   path: '/documentation',
   //   component: Layout,
@@ -138,28 +137,28 @@ export const asyncRoutes = [
     name: 'Permission',
     meta: {
       title: '店铺',
-      icon: 'lock',
+      icon: 'lock'
       // roles: ['admin', 'editor'] // you can set roles in root nav
     },
     children: [
-      // {
-      //   path: 'page',
-      //   component: () => import('@/views/permission/page'),
-      //   name: 'PagePermission',
-      //   meta: {
-      //     title: '店铺管理',
-      //     roles: ['admin'] // or you can only set roles in sub nav
-      //   }
-      // },
       {
-        path: 'directive',
-        component: () => import('@/views/permission/directive'),
-        name: 'DirectivePermission',
+        path: 'page',
+        component: () => import('@/views/permission/page'),
+        name: 'PagePermission',
         meta: {
-          title: '店铺管理'
-          // if do not set roles, means: this page does not require permission
+          title: '店铺管理',
+          roles: ['admin'] // or you can only set roles in sub nav
         }
       }
+      // {
+      //   path: 'directive',
+      //   component: () => import('@/views/permission/directive'),
+      //   name: 'DirectivePermission',
+      //   meta: {
+      //     title: '店铺管理'
+      //     // if do not set roles, means: this page does not require permission
+      //   }
+      // }
       // {
       //   path: 'role',
       //   component: () => import('@/views/permission/role'),
@@ -249,7 +248,7 @@ export const asyncRoutes = [
     ]
   },
 
-  setting,
+  setting
 
   // {
   //   path: '/tab',
