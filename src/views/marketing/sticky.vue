@@ -1,135 +1,166 @@
 <template>
-  <div>
-    <sticky :z-index="10" class-name="sub-navbar">
-      <el-dropdown trigger="click">
-        <el-button plain>
-          Platform<i class="el-icon-caret-bottom el-icon--right" />
-        </el-button>
-        <el-dropdown-menu slot="dropdown" class="no-border">
-          <el-checkbox-group v-model="platforms" style="padding: 5px 15px;">
-            <el-checkbox v-for="item in platformsOptions" :key="item.key" :label="item.key">
-              {{ item.name }}
-            </el-checkbox>
-          </el-checkbox-group>
-        </el-dropdown-menu>
-      </el-dropdown>
-
-      <el-dropdown trigger="click">
-        <el-button plain>
-          Link<i class="el-icon-caret-bottom el-icon--right" />
-        </el-button>
-        <el-dropdown-menu slot="dropdown" class="no-padding no-border" style="width:300px">
-          <el-input v-model="url" placeholder="Please enter the content">
-            <template slot="prepend">
-              Url
-            </template>
-          </el-input>
-        </el-dropdown-menu>
-      </el-dropdown>
-
-      <div class="time-container">
-        <el-date-picker v-model="time" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="Release time" />
+  <div class="sticky">
+    <div class="sticky-top">
+      <span>维他命商城后台</span>
+      <span>&gt;</span>
+      <span>营销</span>
+      <span>&gt;</span>
+      <span>店内促销</span>
+    </div>
+    <div class="sticky-content">
+      <div class="sticky-con-top">
+        <h3 class="sticky-title">店内促销</h3>
+        <el-form ref="form" :model="form" label-width="80px">
+          <el-row v-for="(item, index) in formList" :key="index" type="flex">
+            <el-col v-for="(value, key) in item" :key="key" :span="10" class="form-item">
+              <el-form-item :label="value.label" class="form-label">
+                <component
+                  :is="value.is"
+                  v-model="form[value.name]"
+                  :type="value.type"
+                  :range-separator="value.swparator"
+                  :start-placeholder="value.alery"
+                  :end-placeholder="value.last"
+                  :options="value.options"
+                  :placeholder="value.placeholder"
+                  :range.sync="form[value.name]"
+                >
+                  <!-- <! 根据value.is判断渲染Ipt组件还是select组件 ---->
+                  <el-option v-for="(v, k) in value.options" :key="k" :label="v.name" :value="v.value" />
+                  <!-- <! 渲染下拉框的每一项 ---->
+                </component>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-form-item>
+            <el-button type="primary" class="search" @click="submit">查询</el-button>
+            <el-button type="primary" class="rest-info" @click="reset">重置</el-button>
+          </el-form-item>
+        </el-form>
       </div>
-
-      <el-button style="margin-left: 10px;" type="success">
-        publish
-      </el-button>
-    </sticky>
-
-    <div class="components-container">
-      <aside>
-        Sticky header, When the page is scrolled to the preset position will be sticky on the top.
-      </aside>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <sticky :sticky-top="200">
-        <el-button type="primary"> placeholder</el-button>
-      </sticky>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
-      <div>placeholder</div>
     </div>
   </div>
 </template>
 
 <script>
 import Sticky from '@/components/Sticky'
-
+import { mapActions } from 'vuex'
 export default {
   name: 'StickyDemo',
   components: { Sticky },
   data() {
     return {
-      time: '',
-      url: '',
-      platforms: ['a-platform'],
-      platformsOptions: [
-        { key: 'a-platform', name: 'platformA' },
-        { key: 'b-platform', name: 'platformB' },
-        { key: 'c-platform', name: 'platformC' }
-      ],
-      pickerOptions: {
-        disabledDate(time) {
-          return time.getTime() > Date.now()
-        }
-      }
+      form: {
+        shopName: '',
+        building: '',
+        cateGory: '',
+        Type: '',
+        startTime: '',
+        endTime: ''
+      },
+      formList: [
+        [{
+          label: '店铺名',
+          name: 'shopName',
+          placeholder: '请输入店铺名称',
+          is: 'el-input'
+        },
+        {
+          label: '楼层',
+          name: 'building',
+          placeholder: '请输入店铺名称',
+          is: 'el-select',
+          options: [
+            {
+              name: 'F1',
+              value: 0
+            }
+          ]
+        }, {
+          label: '分类',
+          name: 'cateGory',
+          placeholder: '请选择',
+          is: 'el-cascader',
+          options: [
+            {
+              label: 'F1',
+              value: 0,
+              children: [
+                {
+                  label: '化妆品'
+                }
+              ]
+            }
+          ]
+        }, {
+          label: '状态',
+          name: 'Type',
+          placeholder: '请选择',
+          is: 'el-select',
+          options: [
+            {
+              name: 'F1',
+              value: 0
+            }
+          ]
+        }, {
+          label: '开始时间',
+          name: 'startTime',
+          septarator: '~',
+          type: ' daterange',
+          alery: '最早开始时间',
+          last: '最晚开始时间',
+          is: 'el-date-picker'
+        }, {
+          label: '结束时间',
+          name: 'endTime',
+          septarator: '~',
+          type: ' daterange',
+          alery: '最早结束时间',
+          last: '最晚结束时间',
+          is: 'el-date-picker'
+        }]
+      ]
     }
+  },
+  methods: {
+    ...mapActions('sticky', ['getFloorList'])
+  },
+  mounted() {
+    this.getFloorList()
   }
 }
 </script>
 
-<style scoped>
-.components-container div {
-  margin: 10px;
+<style >
+@import url("./scss/sticky/index.css");
+.el-row{
+  display: flex;
+  flex-wrap: wrap;
+}
+.form-item{
+  width: 40%;
+}
+.search{
+    display: inline-block;
+    background: #3ec6b6;
+    border: 1px solid #3ec6b6;
+    color: #fff;
+    border-radius: 4px;
+    text-align: center;
+    width: 60px;
+    height: 35px;
+    padding: 6px 15px;
 }
 
-.time-container {
+.rest-info{
   display: inline-block;
+  color: #3c3c3c;
+  border-radius: 4px;
+  border: 1px solid #e8e8e8;
+  background: white;
+  width: 60px;
+  height: 35px;
+  padding: 6px 15px;
 }
 </style>
