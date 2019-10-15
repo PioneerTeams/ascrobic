@@ -6,15 +6,42 @@
             :data="tableData"
             style="width: 100%"
             row-key="id"
-            :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
-            <el-table-column prop="image" label="主图" type="selection">
-                <!-- <img v-for="item in tableData" :key="item.id" :src="item.image" alt=""> -->
+            @cell-click="columnChange">
+            <el-table-column type="selection">
             </el-table-column>
-            <el-table-column prop="name" label="商品名称" >
+             <el-table-column type="expand" ref="cell">
+                <template>
+                    <el-table :data="tableColumn" style="width: 100%">
+                        <el-table-column prop="image" label="缩略图">
+                            <template slot-scope="scope">            
+                                <img :src="scope.row.image" class="img" alt=""/>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="name" label="颜色">
+                        </el-table-column>
+                        <el-table-column prop="code" label="SKU编码">
+                        </el-table-column>
+                        <el-table-column prop="price" label="原价">
+                        </el-table-column>
+                        <el-table-column prop="discount_price" label="促销价">
+                        </el-table-column>
+                        <el-table-column prop="stock" label="电商库存">
+                        </el-table-column>
+                        <el-table-column prop="bar_code" label="条形码">
+                        </el-table-column>
+                    </el-table>
+                </template>
+            </el-table-column>
+            <el-table-column prop="image" label="主图">
+                <template slot-scope="scope">            
+                   <img :src="scope.row.image" class="img" alt=""/>
+                </template>
+            </el-table-column>
+            <el-table-column prop="name" label="商品名称">
             </el-table-column>
             <el-table-column prop="price" label="品牌价">
             </el-table-column>
-            <el-table-column prop="sku_stock_num" label="库存">
+            <el-table-column prop="stock" label="库存">
             </el-table-column>
             <el-table-column prop="category_name" label="分类">
             </el-table-column>
@@ -25,7 +52,8 @@
                 <el-button
                   size="mini"
                   type="danger"
-                  @click="handleDelete(scope.$index, scope.row)">查看</el-button>
+                  @click="handleDelete(scope.$index, scope.row)">查询
+                  </el-button>
                 <el-button
                   size="mini"
                   @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
@@ -37,106 +65,74 @@
           <el-pagination
             background
             layout="total, prev, pager, next"
-            :total="1000">
+            :total="count"
+            @current-change="handleCurrentChange">
           </el-pagination>
         </div>
     </div>
 </template>
 
 <script>
-    import { tableList } from '@/api/commodity'
+    import { tableList, tableChild } from '@/api/commodity'
     export default {
+        props:{
+            activeName:Number
+        },
         data() {
             return {
-                tableData: [{
-                    id:1,
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    province: '上海',
-                    city: '普陀区',
-                    address: '上海市普陀区金沙江路 1518 弄',
-                    zip: 200333,
-                    operate:''
-                }, {
-                    id:2,
-                    date: '2016-05-02',
-                    name: '王小虎',
-                    province: '上海',
-                    city: '普陀区',
-                    address: '上海市普陀区金沙江路 1518 弄',
-                    zip: 200333
-                }, {
-                    id:3,
-                    date: '2016-05-04',
-                    name: '王小虎',
-                    province: '上海',
-                    city: '普陀区',
-                    address: '上海市普陀区金沙江路 1518 弄',
-                    zip: 200333,
-                    children: [{
-                        id: 31,
-                        date: '2016-05-04',
-                        name: '王小虎',
-                        province: '上海',
-                        city: '普陀区',
-                        address: '上海市普陀区金沙江路 1518 弄',
-                        zip: 200333
-                    }, {
-                        id: 32,
-                        date: '2016-05-01',
-                        name: '王小虎',
-                        province: '上海',
-                        city: '普陀区',
-                        address: '上海市普陀区金沙江路 1518 弄',
-                        zip: 200333
-                    }]
-                }, {
-                    id:4,
-                    date: '2016-05-01',
-                    name: '王小虎',
-                    province: '上海',
-                    city: '普陀区',
-                    address: '上海市普陀区金沙江路 1518 弄',
-                    zip: 200333
-                }, {
-                    id:5,
-                    date: '2016-05-08',
-                    name: '王小虎',
-                    province: '上海',
-                    city: '普陀区',
-                    address: '上海市普陀区金沙江路 1518 弄',
-                    zip: 200333
-                }, {
-                    id:6,
-                    date: '2016-05-06',
-                    name: '王小虎',
-                    province: '上海',
-                    city: '普陀区',
-                    address: '上海市普陀区金沙江路 1518 弄',
-                    zip: 200333
-                }, {
-                    id:7,
-                    date: '2016-05-07',
-                    name: '王小虎',
-                    province: '上海',
-                    city: '普陀区',
-                    address: '上海市普陀区金沙江路 1518 弄',
-                    zip: 200333
-                }]
+                tableColumn:[],
+                tableData: [],
+                num:4,
+                count:0,
+                page:1,
+                storeId:0
             }
         },
         mounted() {
-            this.getList()
+            this.getTable(this.num,this.page)
         },
         methods: {
-            getList(){
-                tableList().then(res=>{
+            // 初始化表格数据
+            getTable(num,page){
+                tableList(num,page).then(res=>{
+                    this.count=res.data.pagination.count
                     this.tableData=res.data.list
                     const stock=res.data.list.map(item=>item.sku_stock_num)
                     const num=res.data.list.map(item=>item.sku_nums)
-                    // this.tableData.map(item=>item.stock:`${num}个SKU${stock}个库存`)
-                    console.log(this.tableData)
+                    this.tableData.map((item,i)=>item.stock=`${num[i]}个SKU${stock[i]}个库存`)
                 })
+            },
+            // 子表格的数据
+            columnChange(row, column, cell, event){
+                tableChild(row.vm_store_id,this.num,row.vm_store_product_id).then(res=>{
+                    this.tableColumn=res.data.sku_list
+                })
+            },
+            // 获得页码
+            handleCurrentChange(val) {
+                this.page=val
+            },
+            handleEdit(index, row) {
+                console.log(index, row);
+            },
+            handleDelete(index, row) {
+                this.$router.history.push({
+                    name:'look',
+                    query:{
+                        id:row.id,
+                        vm_store_product_id:row.vm_store_product_id,
+                        status:this.num
+                    }
+                })
+            }
+        },
+        watch: {
+            activeName(num){
+                this.num=num
+                this.getTable(num,this.page)
+            },
+            page(size){
+                this.getTable(this.num,size)
             }
         },
     }
@@ -162,6 +158,11 @@
         }
         .table-wrap{
             margin: 24px 0;
+            .img{
+                width: 48px;
+                height: 64px;
+                background-size: 100% 100%;
+            }
         }
         .paging{
             float: right;
