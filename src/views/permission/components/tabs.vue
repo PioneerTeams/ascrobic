@@ -1,9 +1,8 @@
 <template>
   <div class="mangeTable">
-    {{ console.log(this.list, '------list ') }}
     <el-table :data="tableData" style="width: 100%">
-      <el-table-column v-for="(ele,index) in list" :key="index" :prop="ele.prop" :label="ele.label" />
-      <el-table-column prop="address" label="操作" width="120">
+      <el-table-column v-for="(ele,index) in list" :key="index" :prop="ele.prop?ele.prop:'无'" :label="ele.label" />
+      <el-table-column label="操作" width="120">
         <el-button type="text" size="small">查看</el-button>
       </el-table-column>
     </el-table>
