@@ -8,14 +8,15 @@ const state = {
 
 const mutations = {
   setFloorList(state, payload) {
-    console.log(payload)
+    //console.log(payload)
     state.floorList = payload
   },
   setCateGoryList(state, payload) {
-    console.log(payload)
+   // console.log(payload)
     state.cateGoryList = payload
   },
   setTableList(state, payload) {
+    console.log(payload)
     state.tableList = payload
   }
 }

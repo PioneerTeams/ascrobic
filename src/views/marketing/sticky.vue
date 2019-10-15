@@ -25,18 +25,18 @@
                 >
                   <!-- <! 根据value.is判断渲染Ipt组件还是select组件 ---->
                   <el-option
-                    v-for="(v, k) in floorList"
+                    v-for="(v,k) in floorList"
                     v-show="value.name == 'floor_id'"
                     :key="k.id"
                     :label="v.name"
                     :value="v.id"
                   />
                   <el-option
-                    v-for="(v) in value.list"
+                    v-for="(val) in value.list"
                     v-show="value.name == 'status'"
-                    :key="v.value"
-                    :label="v.name"
-                    :value="v.value"
+                    :key="val.name"
+                    :label="val.name"
+                    :value="val.value"
                   />
                   <el-option-group
                     v-for="group in cateGoryList"
@@ -210,20 +210,37 @@ export default {
         start_data,
         end_data
       } = this.form
-      this.getTableList({
-        page: this.currentPage,
-        vm_store_name,
-        floor_id,
-        category_id,
-        status,
-        'start_data[0]': start_data[0],
-        'start_data[1]': start_data[1],
-        'end_data[0]': end_data[0],
-        'end_data[1]': end_data[1]
-      })
-      console.log(this.$refs.form.model)
+      let obj={}
+        for(let key in this.form){
+        if(this.form[key]){
+        obj[key]=this.form[key]
+          this.getTableList({page:this.currentPage,...obj})
+        }
+      }
+      // this.getTableList({
+      //   page: this.currentPage,
+      //   vm_store_name,
+      //   floor_id,
+      //   category_id,
+      //   status,
+      //   'start_data[0]': start_data[0],
+      //   'start_data[1]': start_data[1],
+      //   'end_data[0]': end_data[0],
+      //   'end_data[1]': end_data[1]
+      // })
+      
     },
-    reset() {},
+    reset() {
+    
+      let obj= Object.entries(this.form).map(item=>{
+        return [item[0],'']
+      })
+      obj.forEach((item)=>{
+        this.form[item[0]]=item[1]
+      })
+    
+       this.getTableList({ page:this.currentPage })
+    },
     handleClick(data) {},
     currentChange(page) {
       this.currentPage = page

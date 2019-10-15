@@ -13,6 +13,7 @@ export function getcateGoryList() {
 }
 
 export function getTableList(params) {
+  console.log(params)
   return request({
     url: '/store/promotion-list', method: 'post', baseURL: '/api', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, data: qs.stringify(params)
   })

@@ -1,0 +1,106 @@
+* {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  outline: none;
+  box-sizing: border-box;
+  text-decoration: none;
+}
+
+.inline-edit-table {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+}
+
+.edit-top {
+  width: 100%;
+  height: 44px;
+  padding: 16px 0 0 24px;
+}
+
+.edit-top span {
+  color: rgba(0, 0, 0, 0.45);
+  font-size: 14px;
+}
+
+.edit-content {
+  width: 100%;
+  display: flex;
+  padding: 0 24px;
+  flex-direction: column;
+}
+
+.edit-con-top {
+  width: 100%;
+  height: 73px;
+  padding: 24px;
+}
+
+.edit-con-top h3 {
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.edit-nav-select {
+  width: 100%;
+  height: 64px;
+  padding: 24px 0 0;
+}
+
+.edit-nav-select span {
+  display: inline-block;
+  box-sizing: content-box;
+  padding: 5px 5px 10px;
+  margin: 0 24px;
+  border-bottom: 2px solid transparent;
+  font-family: PingFangSC-Regular;
+  font-size: 14px;
+  color: #595959;
+  text-align: center;
+  line-height: 22px;
+  cursor: pointer;
+}
+
+.edit-nav-select .active {
+  color: #3ec6b6;
+  border-bottom: 2px solid #3ec6b6;
+}
+
+.edit-group {
+  width: 100%;
+  height: 212px;
+  padding: 24px;
+  margin-top: 1px;
+  display: flex;
+}
+
+.edit-group .el-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.edit-group .el-form .el-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.edit-group .btn {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.edit-list {
+  width: 100%;
+  display: flex;
+  margin: 24px 0 0;
+  padding: 24px;
+  flex-direction: column;
+}
+
+.edit-list .table-btm {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
