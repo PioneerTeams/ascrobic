@@ -2,7 +2,7 @@
   <div class="management">
     <div class="managementTab">
       <div class="managementhead">店铺管理</div>
-      <el-tabs v-model="activeName" class="managetabs" @tab-click="handleClick">
+      <el-tabs v-model="activeName" class="managetabs">
         <el-tab-pane label="全部店铺" name="shop">
           <div class="mangeFrom">
             <el-form
@@ -108,10 +108,6 @@ export default {
   },
   mounted() {},
   methods: {
-    handleClick(tab, event) {
-      console.log((this.activeName = tab.name))
-      console.log(tab.name)
-    },
     onSubmit() {
       console.log(this.formInline)
     },
