@@ -41,7 +41,38 @@
             </el-table>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="角色描述" name="second" />
+        <el-tab-pane label="邀请中" name="invite">
+          <div class="mangeTable">
+            <el-table :data="tableData" style="width: 100%">
+              <el-table-column prop="name" label="店铺名称" width="120" />
+              <el-table-column prop="floor_name" label="楼层" width="120" />
+              <el-table-column prop="address" label="位置" width="120" />
+              <el-table-column prop="category_data" label="所属分类" width="120" />
+              <el-table-column prop="shop_manager" label="店长" />
+              <el-table-column prop="building" label="楼管" width="180" />
+              <el-table-column prop="status_str" label="状态" width="120" />
+              <el-table-column prop="address" label="操作" width="120">
+                <el-button type="text" size="small" @cell-click="goDetail">查看</el-button>
+              </el-table-column>
+            </el-table>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="角色描述" name="second">
+          <div class="mangeTable">
+            <el-table :data="tableData" style="width: 100%">
+              <el-table-column prop="name" label="店铺名称" width="120" />
+              <el-table-column prop="floor_name" label="楼层" width="120" />
+              <el-table-column prop="address" label="位置" width="120" />
+              <el-table-column prop="category_data" label="所属分类" width="120" />
+              <el-table-column prop="shop_manager" label="店长" />
+              <el-table-column prop="building" label="楼管" width="180" />
+              <el-table-column prop="status_str" label="状态" width="120" />
+              <el-table-column prop="address" label="操作" width="120">
+                <el-button type="text" size="small" @cell-click="goDetail">查看</el-button>
+              </el-table-column>
+            </el-table>
+          </div>
+        </el-tab-pane>
       </el-tabs>
     </div>
   </div>
