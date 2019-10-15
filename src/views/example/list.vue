@@ -84,7 +84,7 @@ export default {
   },
   computed: {},
   created() {
-    console.log(this.$router)
+    // console.log(this.$router)
   },
   mounted() {},
   methods: {

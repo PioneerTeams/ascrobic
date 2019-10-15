@@ -13,20 +13,29 @@
               label-width="180"
             >
               <el-form-item label="店铺名">
-                <el-input v-model="formInline.design" placeholder="请输入店铺名" />
+                <el-input v-model="formInline.vm_store_name" placeholder="请输入店铺名" />
               </el-form-item>
               <el-form-item label="楼层">
-                <el-select v-model="formInline.selectArr" placeholder="请选择">
+                <el-select v-model="formInline.floor_id" placeholder="请选择">
                   <el-option
                     v-for="ele in selectArr"
                     :key="ele.id"
                     :label="ele.name"
-                    :value="ele.name"
+                    :value="ele.id"
                   />
                 </el-select>
               </el-form-item>
               <el-form-item label="分类">
-                <el-input v-model="formInline.classification" placeholder="请选择" />
+                <el-select v-model="formInline.category_id" placeholder="请选择">
+                  <el-option-group v-for="group in categorys" :key="group.label" :label="group.label">
+                    <el-option
+                      v-for="item in group.children"
+                      :key="item.id"
+                      :label="item.name"
+                      :value="item.id"
+                    />
+                  </el-option-group>
+                </el-select>
               </el-form-item>
               <br>
               <el-form-item>
@@ -39,7 +48,7 @@
           </div>
 
           <tabs :table-data="tableData" :list="arr[activeName]" />
-          <el-pagination background layout="prev, pager, next" :total="1" />
+          <el-pagination class="pagesye" background layout="prev, pager, next" :total="1" />
         </el-tab-pane>
         <el-tab-pane label="e店铺" name="eshop">
           <div class="mangeFrom">
@@ -55,8 +64,12 @@
               </el-form-item>
               <el-form-item label="授权品牌">
                 <el-select v-model="formE.pinpai" placeholder="请选择">
-                  <el-option label="f1" value="f1" />
-                  <el-option label="f2" value="f2" />
+                  <el-option
+                    v-for="ele in branlist"
+                    :key="ele.id"
+                    :label="ele.name"
+                    :value="ele.name"
+                  />
                 </el-select>
               </el-form-item>
               <br>
@@ -69,7 +82,7 @@
             </el-form>
           </div>
           <tabs :table-data="tableData" :list="arr[activeName]" />
-          <el-pagination background layout="prev, pager, next" :total="1" />
+          <el-pagination class="pagesye" background layout="prev, pager, next" :total="1" />
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -77,7 +90,7 @@
 </template>
 <script>
 import arr from './data/pages.js'
-import { getFloorList, getStoreList } from '@/api/shopArcade.js'
+import { getFloorList, getStoreList, getBranchList, getcategoryList } from '@/api/shopArcade.js'
 import tabs from './components/tabs'
 export default {
   components: { tabs },
@@ -86,49 +99,56 @@ export default {
     return {
       activeName: 'shop',
       selectArr: [],
-      formInline: {
-        design: '',
-        selectArr: [],
-        classification: ''
-      },
-      formE: {
-        design: '',
-        quanxian: '',
-        pinpai: ''
-      },
+      formInline: { vm_store_name: '', floor_id: '', category_id: '' },
+      formE: { design: '', quanxian: '', pinpai: '' },
       tableData: [],
-      arr: arr
+      arr,
+      branlist: [],
+      categorys: [],
+      fromdata: { page: 1, is_e_shop: '', store_type: '', scene_type: 1 }
     }
   },
   computed: {},
   created() {
-    console.log(arr.shop)
     this.getFoor()
-    this.getstorelist()
+    this.getstorelist(this.fromdata)
+    this.getBranchlistt()
+    this.getcategory()
   },
   mounted() {},
   methods: {
     onSubmit() {
-      console.log(this.formInline)
+      const obj = {}
+      for (const k in this.formInline) {
+        if (this.formInline[k]) {
+          obj[k] = this.formInline[k]
+        }
+      }
+      console.log(12313)
+      this.getstorelist(Object.assign(this.fromdata, obj))
     },
     onReset(rulesFrom) {
-      this.$refs[rulesFrom].resetFields()
+      const arr = Object.keys(this.formInline)
+      arr.forEach((item) => {
+        this.formInline[item] = ''
+      })
     },
-    goDetail(row) {
-      console.log(row)
-    },
+    goDetail(row) {},
     async getFoor() {
       const result = await getFloorList()
       this.selectArr = result.list
     },
-    async getstorelist() {
-      const result = await getStoreList({
-        page: 1,
-        is_e_shop: '',
-        store_type: '',
-        scene_type: 1
-      })
+    async getstorelist(data) {
+      const result = await getStoreList(data)
       this.tableData = result.list
+    },
+    async getBranchlistt() {
+      const result = await getBranchList()
+      this.branlist = result
+    },
+    async getcategory() {
+      const result = await getcategoryList()
+      this.categorys = result
     }
   }
 }
@@ -141,6 +161,7 @@ export default {
     margin-top: 24px;
     padding: 24px;
     background: #fff;
+    border-radius: 10px;
   }
   .managementTab {
     width: 100%;
@@ -162,9 +183,15 @@ export default {
     padding: 24px;
     background: #fff;
     text-align: center;
+    border-radius: 10px;
   }
 }
 .el-form--inline .el-form-item {
   margin-left: 35px;
+}
+.pagesye {
+  float: right;
+  padding: 15px 0;
+  margin-right: 30px;
 }
 </style>

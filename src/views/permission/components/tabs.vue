@@ -1,8 +1,8 @@
 <template>
   <div class="mangeTable">
-    <el-table :data="tableData" style="width: 100%">
+    <el-table :data="tableData" style="width: 100%" @cell-click="handleClick">
       <el-table-column v-for="(ele,index) in list" :key="index" :prop="ele.prop?ele.prop:'无'" :label="ele.label" />
-      <el-table-column label="操作" width="120" @cell-click="handleClick">
+      <el-table-column label="操作" width="120">
         <el-button type="text" size="small">查看</el-button>
       </el-table-column>
     </el-table>
@@ -26,7 +26,10 @@ export default {
   mounted() {},
   methods: {
     handleClick(tab, event) {
-      console.log(tab)
+      if (event.label === '操作') {
+        const id = tab.id
+        this.$router.push({ name: 'pageDetails', query: { id }})
+      }
     }
   }
 }
