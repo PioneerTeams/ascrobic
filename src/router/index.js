@@ -150,6 +150,16 @@ export const asyncRoutes = [
           roles: ['admin'] // or you can only set roles in sub nav
         }
       },
+      {
+        path: 'pageDetails',
+        component: () => import('@/views/permission/details/pageDetails'),
+        name: 'pageDetails',
+        hidden: true,
+        meta: {
+          title: '店铺管理',
+          roles: ['admin'] // or you can only set roles in sub nav
+        }
+      }
       // {
       //   path: 'directive',
       //   component: () => import('@/views/permission/directive'),
