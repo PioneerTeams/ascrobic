@@ -117,7 +117,8 @@ export default {
   methods: {
     handleClick(tab, event) {
       console.log(this.activeName)
-      console.log(tab)
+      console.log(tab.name)
+      console.log(this.arr[tab.name])
     },
     onSubmit() {
       console.log(this.formInline)

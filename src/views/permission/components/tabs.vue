@@ -1,5 +1,6 @@
 <template>
   <div class="mangeTable">
+    {{ console.log(this.list, '------list ') }}
     <el-table :data="tableData" style="width: 100%">
       <el-table-column v-for="(ele,index) in list" :key="index" :prop="ele.prop" :label="ele.label" />
       <el-table-column prop="address" label="操作" width="120">
@@ -19,7 +20,7 @@ export default {
     return {}
   },
   computed: {},
-  created() { console.log(this.list, '------list ') },
+  created() { },
   mounted() {},
   methods: {}
 }
