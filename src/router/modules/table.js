@@ -19,6 +19,13 @@ const tableRouter = {
       meta: { title: '商品管理' }
     },
     {
+      path: 'look',
+      component: () => import('@/views/table/look'),
+      name: 'look',
+      hidden:true,
+      meta: { title: '商品列表' }
+    },
+    {
       path: 'drag-table',
       component: () => import('@/views/table/drag-table'),
       name: 'DragTable',
