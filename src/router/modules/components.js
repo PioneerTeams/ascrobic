@@ -23,6 +23,14 @@ const componentsRouter = {
       component: () => import('@/views/components-demo/markdown'),
       name: 'MarkdownDemo',
       meta: { title: '店铺订单' }
+
+    },
+    {
+      path: 'markdown/detail/:sub_order_number',
+      component: () => import('@/views/components-demo/markdownDetail'),
+      name: 'MarkdownDetail',
+      meta: { title: '店铺订单详情' },
+      hidden: true
     },
     {
       path: 'json-editor',
