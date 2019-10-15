@@ -59,30 +59,32 @@
                     :end-placeholder="value.endPlaceholder"
                   >
                     <el-option
-                      v-for="(v, k) in value.options"
-                      :key="k"
+                      v-for="(v) in value.options"
+                      :key="v.name"
                       :label="v.name"
                       :value="v.name"
                     />
 
                     <el-option
-                      v-for="(v, k) in floor.length&&floor"
+                      v-for="(v) in floor.length&&floor"
                       v-show="value.name=='floor'"
-                      :key="k"
+                      :key="v.name"
                       :label="v.name"
-                      :value="v.name"
+                      :value="v.id"
+                      @click="()=>changeFloorId(v.id)"
                     />
 
                     <el-option-group
-                      v-for="(v, k) in store.length&&store"
+                      v-for="(v) in store.length&&store"
                       v-show="value.name=='store'"
-                      :key="k"
+                      :key="v.name"
                       :label="v.title"
                       :value="v.title"
+                      @click="()=>changeStoreId(v.value)"
                     >
                       <el-option
-                        v-for="item in v.children"
-                        :key="item.value"
+                        v-for="(item,index) in v.children"
+                        :key="index"
                         :label="item.title"
                         :value="item.title"
                       />
@@ -92,11 +94,8 @@
               </el-col>
             </el-row>
             <el-form-item class="form-btns">
-              <div class="form-btns-left" />
-              <div class="form-btns-right">
-                <el-button type="primary" @click="submit">查询</el-button>
-                <el-button @click="reset">重置</el-button>
-              </div>
+              <el-button type="primary" @click="submit">查询</el-button>
+              <el-button @click="reset">重置</el-button>
             </el-form-item>
           </el-form>
           <el-table :data="subOrderList" style="width: 100%">
@@ -111,15 +110,21 @@
             <el-table-column prop="pay_amount" label="实付金额" width="95" />
             <el-table-column fixed="right" label="操作" width="66">
               <template slot-scope="scope">
-                <el-button type="text" size="small" @click="handleClick(scope.row)">查看</el-button>
+                <el-button
+                  type="text"
+                  size="small"
+                  @click="handleClick(scope.row)"
+                >查看</el-button>
               </template>
             </el-table-column>
           </el-table>
           <el-pagination
             :current-page.sync="currentPage1"
-            :page-size="100"
+            :page-size="10"
             layout="total, prev, pager, next"
-            :total="100"
+            :total="totalNum"
+            :hide-on-single-page="totalNum"
+            class="pagination"
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
           />
@@ -131,6 +136,7 @@
 <script>
 import qs from 'querystring'
 import request from '@/utils/request'
+import { mapActions } from 'vuex'
 export default {
   data() {
     return {
@@ -139,6 +145,13 @@ export default {
       floor: [],
       store: [],
       subOrderList: [],
+      currentPage1: 1,
+      totalPages: 0,
+      totalNum: 0,
+      index: 0,
+      vm_store_id: '', // 店铺id
+      floor_id: '',
+      sub_order_number: '', // 点击查看按钮请求对应的数据
       navList: [
         {
           title: '全部',
@@ -206,13 +219,16 @@ export default {
                 name: '全部'
               },
               {
-                name: '线上pos'
+                name: '线上pos',
+                order_type: 1
               },
               {
-                name: '电商订单'
+                name: '电商订单',
+                order_type: 0
               },
               {
-                name: '电子卡券'
+                name: '电子卡券',
+                order_type: 2
               }
             ]
           },
@@ -304,19 +320,40 @@ export default {
     this.getSubOrder()
   },
   methods: {
+    ...mapActions('order', ['subOrderInfoAction']),
     handleSelect(key, keyPath) {
       console.log(key, keyPath, 'l')
     },
+    // tab切换改变数据
     changeTab(index) {
+      this.index = index
       this.getOrderSearch(index)
+      this.getSubOrder(index)
+      this.currentPage1 = 1
     },
     submit() {
       console.log(this.form, 'this.form')
     },
+    // 点击查看
     handleClick(row) {
       console.log(row)
+      // window.localStorage.setItem("sub_order_number",row.sub_number)
+      this.$router.push(`markdown/detail/${row.sub_number}`)
     },
     reset() {},
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`)
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`, this.index)
+      this.getSubOrder(this.index, val)
+    },
+    changeStoreId(id) {
+      this.vm_store_id = id
+    },
+    changeFloorId(id) {
+      this.floor_id = id
+    },
     async getOrderSearch(index = 0) {
       const data = {
         org_id: 61500,
@@ -332,13 +369,13 @@ export default {
       })
       this.floor = result.data.floor
       this.store = result.data.store
-      // console.log(result, "lllll");
+      console.log(result, 'eeeeee')
       return result
     },
-    async getSubOrder(index = 0) {
+    async getSubOrder(index = 0, page = 1) {
       const data = {
         org_id: 61500,
-        page: 1,
+        page,
         org_type: 5,
         status: index
       }
@@ -352,6 +389,8 @@ export default {
       console.log(result, 'lllll')
       if (result.code === 200) {
         this.subOrderList = result.data.list
+        this.totalPages = result.data.page.totalPages
+        this.totalNum = result.data.page.totalNum
       }
       return result
     }
