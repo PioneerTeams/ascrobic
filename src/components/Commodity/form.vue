@@ -2,51 +2,50 @@
     <div class="card-group">
         <el-form :inline="true" :model="formInline" class="demo-form-inline" label-width="90px">
           <el-form-item label="款号:">
-            <el-input v-model="formInline.styleNum" placeholder="请输入"></el-input>
+            <el-input v-model="formInline.prod_code" placeholder="请输入"></el-input>
           </el-form-item>
           <el-form-item label="商品名称:">
-            <el-input v-model="formInline.shopName" placeholder="请输入"></el-input>
+            <el-input v-model="formInline.prod_name" placeholder="请输入"></el-input>
           </el-form-item>
           <el-form-item label="分类:">
-            <el-select v-model="formInline.list" filterable placeholder="请选择">
+            <el-select v-model="formInline.category_id" filterable placeholder="请选择">
               <el-option-group v-for="group in formSelect.category" :key="group.id" :label="group.title">
-                <el-option  v-for="item in group.children" :key="item.id" :label="item.title" :value="item.title">
+                <el-option  v-for="item in group.children" :key="item.id" :label="item.title" :value="item.value">
                 </el-option>
               </el-option-group>
             </el-select>
           </el-form-item>
           <el-form-item label="品牌:">
-            <el-select v-model="formInline.brand" placeholder="请选择">
-              <el-option v-for="item in formSelect.brand" :key="item.id" :label="item.name" :value="item.name"></el-option>
+            <el-select v-model="formInline.brand_id" placeholder="请选择">
+              <el-option v-for="item in formSelect.brand" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="商品来源:">
-            <el-select v-model="formInline.source" placeholder="请选择">
-              <el-option v-for="item in formSelect.source" :key="item.id" :label="item.name" :value="item.name"></el-option>
-              <el-option label="区域二" value="beijing"></el-option>
+            <el-select v-model="formInline.prod_src" placeholder="请选择">
+              <el-option v-for="item in formSelect.source" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="商品类型:">
-            <el-select v-model="formInline.types" placeholder="请选择">
-              <el-option v-for="item in formSelect.product_type" :key="item.id" :label="item.name" :value="item.name"></el-option>
+            <el-select v-model="formInline.prod_type" placeholder="请选择">
+              <el-option v-for="item in formSelect.product_type" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="配送方式:">
-            <el-select v-model="formInline.dispatching" placeholder="请选择">
-              <el-option v-for="item in formSelect.delivery" :key="item.id" :label="item.name" :value="item.name"></el-option>
+            <el-select v-model="formInline.type" placeholder="请选择">
+              <el-option v-for="item in formSelect.delivery" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="店铺:">
-            <el-select v-model="formInline.store" placeholder="请选择">
+            <el-select v-model="formInline.vm_store_id" placeholder="请选择">
               <el-option-group v-for="group in formSelect.store" :key="group.id" :label="group.title">
-                <el-option  v-for="item in group.children" :key="item.id" :label="item.title" :value="item.title">
+                <el-option  v-for="item in group.children" :key="item.id" :label="item.title" :value="item.value">
                 </el-option>
               </el-option-group>
             </el-select>
           </el-form-item>
           <el-form-item :label="activeName==4?'上架时间:':(activeName==1?'提交时间:':(activeName==3?'审核时间:':''))" v-show="activeName==3||activeName==1||activeName==4">
             <el-date-picker
-              v-model="formInline.value"
+              v-model="formInline.date"
               type="daterange"
               range-separator="-"
               start-placeholder="开始日期"
@@ -54,13 +53,13 @@
             </el-date-picker>
           </el-form-item>
           <el-form-item label="下架原因:" v-show="activeName==5">
-            <el-select v-model="formInline.reason" placeholder="请选择">
-              <el-option v-for="item in formSelect.down_reason" :key="item.id" :label="item.name" :value="item.name"></el-option>
+            <el-select v-model="formInline.down_reason" placeholder="请选择">
+              <el-option v-for="item in formSelect.down_reason" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="供货商状态:" v-show="activeName==5">
-            <el-select v-model="formInline.retailer" placeholder="请选择">
-              <el-option v-for="item in formSelect.retailer_status" :key="item.id" :label="item.name" :value="item.name"></el-option>
+            <el-select v-model="formInline.retailer_status" placeholder="请选择">
+              <el-option v-for="item in formSelect.retailer_status" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item class="last-formItem">
@@ -72,8 +71,8 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex'
-    import { manageList } from '@/api/commodity'
+    import { mapState, mapMutations, mapActions } from 'vuex'
+    import { manageList, tableList } from '@/api/commodity'
 
     export default {
         props:{
@@ -83,34 +82,61 @@
             return {
                 formSelect:{},
                 formInline: {
-                    styleNum:'',
-                    shopName: '',
-                    list:'',
-                    brand:'',
-                    source:'',
-                    types:'',
-                    dispatching:'',
-                    store:'',
+                    prod_code:'',
+                    prod_name: '',
+                    category_id:'',
+                    brand_id:'',
+                    prod_src:'',
+                    prod_type:'',
+                    type:'',
+                    vm_store_id:'',
                     putaway:'',
-                    value:'',
-                    reason:'',
-                    retailer:'',
-                    submit:'',
+                    date:[],
+                    down_reason:'',
+                    retailer_status:'',
+                    up_time:[],
+                    submit_time:[],
+                    audit_time:[]
                 },
                 num:4,
             }
+        },
+        computed: {
+            ...mapState('commodity',['list'])
+        },
+        created(){
+            this.getFormTable(this.formInline) 
         },
         mounted() {
             this.getlist(this.activeName)
         },
         methods: {
+            ...mapMutations('commodity',['setForm']),
+            ...mapActions('commodity',['getFormTable']),
             getlist(num){
                 manageList(num).then(res=>{
                     this.formSelect=res.data
                 })
             },
             onSubmit() {
-                console.log('submit!');
+                const arr=[],brr=[]
+                arr.push(this.formInline.type)
+                this.formInline.delivery_type=arr
+                const start = new Date(this.formInline.date[0]).toLocaleDateString().replace(/\//g, '-')
+                const end =  new Date(this.formInline.date[1]).toLocaleDateString().replace(/\//g, '-')
+                if(this.formInline.date.length){
+                    brr.push(start,end)
+                }
+                
+                if(this.num===4){
+                    this.formInline.up_time=brr
+                }else if(this.num===1){
+                    this.formInline.submit_time=brr
+                }else if(this.num===3){
+                    this.formInline.audit_time=brr
+                }
+                this.setForm(this.formInline)
+                this.getFormTable(this.formInline)
             },
             resetForm(formName) {
                 let arr = Object.keys(this.formInline)
@@ -121,6 +147,7 @@
         },
         watch: {
             activeName(num){
+                this.num=num
                 this.getlist(num)
             }
         },

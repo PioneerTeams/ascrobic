@@ -26,6 +26,13 @@ const tableRouter = {
       meta: { title: '商品列表' }
     },
     {
+      path: 'compile',
+      component: () => import('@/views/table/compile'),
+      name: 'compile',
+      hidden:true,
+      meta: { title: '商品列表' }
+    },
+    {
       path: 'drag-table',
       component: () => import('@/views/table/drag-table'),
       name: 'DragTable',

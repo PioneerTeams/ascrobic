@@ -73,6 +73,7 @@
 </template>
 
 <script>
+    import { mapState, mapMutations, mapActions } from 'vuex'
     import { tableList, tableChild } from '@/api/commodity'
     export default {
         props:{
@@ -88,13 +89,17 @@
                 storeId:0
             }
         },
+        computed: {
+            ...mapState('commodity',['list'])
+        },
         mounted() {
             this.getTable(this.num,this.page)
         },
         methods: {
+            ...mapMutations('commodity',['setActive','setPage']),
             // 初始化表格数据
             getTable(num,page){
-                tableList(num,page).then(res=>{
+                tableList(this.num,this.page).then(res=>{
                     this.count=res.data.pagination.count
                     this.tableData=res.data.list
                     const stock=res.data.list.map(item=>item.sku_stock_num)
@@ -111,10 +116,21 @@
             // 获得页码
             handleCurrentChange(val) {
                 this.page=val
+                this.setPage(val)
             },
+            // 编辑
             handleEdit(index, row) {
-                console.log(index, row);
+                this.$router.history.push({
+                    name:'compile',
+                    query:{
+                        id:row.id,
+                        vm_store_product_id:row.vm_store_product_id,
+                        standard_category_id:row.standard_category_id,
+                        status:this.num
+                    }
+                })
             },
+            // 查看
             handleDelete(index, row) {
                 this.$router.history.push({
                     name:'look',
@@ -129,10 +145,17 @@
         watch: {
             activeName(num){
                 this.num=num
+                this.setActive(num)
                 this.getTable(num,this.page)
             },
             page(size){
                 this.getTable(this.num,size)
+            },
+            list(list){
+                this.tableData=list
+                const stock=list.map(item=>item.sku_stock_num)
+                const num=list.map(item=>item.sku_nums)
+                this.tableData.map((item,i)=>item.stock=`${num[i]}个SKU${stock[i]}个库存`)
             }
         },
     }
