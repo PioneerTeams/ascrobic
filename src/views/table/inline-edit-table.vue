@@ -10,7 +10,7 @@
     </div>
     <div class="edit-content">
       <div class="edit-con-top">
-        <h3 v-text="flag?'自维护销售属性值管理':'查看分类与属性组关系'"></h3>
+        <h3 v-text="flag?'自维护销售属性值管理':'查看分类与属性组关系'" />
       </div>
       <div class="edit-nav-select">
         <span class="active">规格值列表</span>
@@ -45,8 +45,8 @@
                   />
 
                   <el-option
-                    v-show="value.name == 'attrId'"
                     v-for="val in attrList"
+                    v-show="value.name == 'attrId'"
                     :key="val.attr_id"
                     :label="val.attr_name"
                     :value="val.attr_id"
@@ -62,9 +62,9 @@
           </el-form-item>
         </el-form>
       </div>
-      <div class="edit-list" v-show="flag===true">
+      <div v-show="flag===true" class="edit-list">
         <el-row>
-          <el-button style="background: #3ec6b6; color: #fff;" icon="el-icon-plus" circle></el-button>
+          <el-button style="background: #3ec6b6; color: #fff;" icon="el-icon-plus" circle />
         </el-row>
         <el-table
           ref="multipleTable"
@@ -73,38 +73,38 @@
           style="width: 100%"
           @selection-change="handleSelectionChange"
         >
-          <el-table-column type="selection" width="55"></el-table-column>
+          <el-table-column type="selection" width="55" />
           <el-table-column
             v-for="item in column"
             :key="item.label"
             :prop="item.prop"
             :label="item.label"
             show-overflow-tooltip
-          ></el-table-column>
+          />
         </el-table>
         <el-row class="table-btm">
           <div style="margin-top: 20px">
-            <el-button @click="toggleSelection([tableData[1], tableData[2]])" disabled="true">当页全选</el-button>
-            <el-button @click="toggleSelection()" disabled="true">删除</el-button>
+            <el-button disabled="true" @click="toggleSelection([tableData[1], tableData[2]])">当页全选</el-button>
+            <el-button disabled="true" @click="toggleSelection()">删除</el-button>
           </div>
           <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
             :current-page.sync="currentPage1"
             :page-size="0"
             layout="total, prev, pager, next"
             :total="0"
             style="margin-top: 20px"
-          ></el-pagination>
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+          />
         </el-row>
       </div>
-      <div class="edit-list" v-show="flag===false">
+      <div v-show="flag===false" class="edit-list">
         <el-table :data="tableData" style="width: 100%" :row-class-name="tableRowClassName">
-          <el-table-column prop="date" label="分类" ></el-table-column>
+          <el-table-column prop="date" label="分类" />
           <el-table-column fixed="right" label="操作">
             <template slot-scope="scope">
               <el-button type="text" size="small" @click="handleClick(scope.row)">查看销售属性</el-button>
-               <el-button type="text" size="small" @click="handleClick(scope.row)">查看一般属性</el-button>
+              <el-button type="text" size="small" @click="handleClick(scope.row)">查看一般属性</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -114,109 +114,109 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions } from 'vuex'
 
 export default {
-  name: "InlineEditTable",
+  name: 'InlineEditTable',
   data() {
     return {
       flag: true,
       form: {
-        storeId: "", //所属门店
-        status: "", //状态
-        attrId: "", //关联属性组名
-        itemValue: "", //属性值,
-        father_id: ""
+        storeId: '', // 所属门店
+        status: '', // 状态
+        attrId: '', // 关联属性组名
+        itemValue: '', // 属性值,
+        father_id: ''
       },
       formList: [
         [
           {
-            label: "所属门店",
-            name: "storeId",
-            placeholder: "",
-            is: "el-select"
+            label: '所属门店',
+            name: 'storeId',
+            placeholder: '',
+            is: 'el-select'
           },
           {
-            label: "状态",
-            name: "status",
-            placeholder: "请选择状态",
-            is: "el-select",
+            label: '状态',
+            name: 'status',
+            placeholder: '请选择状态',
+            is: 'el-select',
             list: [
               {
-                name: "生效",
+                name: '生效',
                 value: 1
               },
               {
-                name: "失效",
+                name: '失效',
                 value: 0
               }
             ]
           },
           {
-            label: "关联属性组名",
-            name: "attrId",
-            placeholder: "请选择属性组名称",
-            is: "el-select"
+            label: '关联属性组名',
+            name: 'attrId',
+            placeholder: '请选择属性组名称',
+            is: 'el-select'
           },
           {
-            label: "属性值",
-            name: "itemValue",
-            placeholder: "请输入名称或编码",
-            is: "el-input"
+            label: '属性值',
+            name: 'itemValue',
+            placeholder: '请输入名称或编码',
+            is: 'el-input'
           }
         ]
       ],
       typeList: [
         [
           {
-            label: "分类",
-            name: "father_id",
-            placeholder: "请选择",
-            is: "el-cascader"
+            label: '分类',
+            name: 'father_id',
+            placeholder: '请选择',
+            is: 'el-cascader'
           }
         ]
       ],
       column: [
         {
-          label: "名称",
-          prop: "name"
+          label: '名称',
+          prop: 'name'
         },
         {
-          label: "编码",
-          prop: "encoded"
+          label: '编码',
+          prop: 'encoded'
         },
         {
-          label: "门店",
-          prop: "store"
+          label: '门店',
+          prop: 'store'
         },
         {
-          label: "状态",
-          prop: "type"
+          label: '状态',
+          prop: 'type'
         },
         {
-          label: "操作",
-          prop: "action"
+          label: '操作',
+          prop: 'action'
         }
       ]
-    };
+    }
   },
   computed: {
-    ...mapState("inline-edit-table", ["attrStoreList", "attrList"])
+    ...mapState('inline-edit-table', ['attrStoreList', 'attrList'])
   },
   created() {
-    this.getAttrStoreListAction();
-    this.getAttrListAction();
+    this.getAttrStoreListAction()
+    this.getAttrListAction()
   },
   methods: {
-    ...mapActions("inline-edit-table", [
-      "getAttrStoreListAction",
-      "getAttrListAction"
+    ...mapActions('inline-edit-table', [
+      'getAttrStoreListAction',
+      'getAttrListAction'
     ]),
     submit() {},
     reset() {},
     handleSelectionChange() {}
   }
-};
+}
 </script>
 
 <style scoped>
