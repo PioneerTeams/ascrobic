@@ -16,40 +16,40 @@
         <p>{{ detailList.address }}</p>
         <h3>LOGO</h3>
         <img
-          style="height: auto;width:100px"
           v-if="detailList.r_logo_img"
+          style="height: auto;width:100px"
           :src="detailList.r_logo_img"
           alt
-        /> -
+        > -
         <h3>背景图</h3>
         <img
           v-if="detailList.r_background_img"
           style="height: auto;width:200px"
           :src="detailList.r_background_img"
           alt
-        />
+        >
         <h3>店铺描述</h3>
         <p>{{ detailList.description }}</p>
       </el-tab-pane>
       <el-tab-pane label="匹配设置">
         匹配设置
-        <p>{{detailList.matching_info}}</p>
+        <p>{{ detailList.matching_info }}</p>
       </el-tab-pane>
       <el-tab-pane label="e店铺设置">
         e店铺设置
-        <p v-if="detailList.e_store_info.titile">{{detailList.e_store_info.titile}}</p>
+        <p v-if="detailList.e_store_info.titile">{{ detailList.e_store_info.titile }}</p>
         <div v-if="detailList.e_store_info.titile_data">
-          <p v-for="(item,index) in detailList.e_store_info.titile_data" :key="index">{{item}}</p>
+          <p v-for="(item,index) in detailList.e_store_info.titile_data" :key="index">{{ item }}</p>
         </div>
       </el-tab-pane>
       <el-tab-pane label="团队">
         团队
-        <h3>{{detailList.team_list.building}}</h3>
-        <p v-for="(item) in detailList.team_list.building_data" :key="item">{{item}}</p>
-        <h3>{{detailList.team_list.shopowner}}</h3>
-        <p v-for="(item) in detailList.team_list.shopowner_data" :key="item">{{item}}</p>
-        <h3>{{detailList.team_list.shopping}}</h3>
-        <p v-for="(item) in detailList.team_list.shopping_data" :key="item">{{item}}</p>
+        <h3>{{ detailList.team_list.building }}</h3>
+        <p v-for="(item) in detailList.team_list.building_data" :key="item">{{ item }}</p>
+        <h3>{{ detailList.team_list.shopowner }}</h3>
+        <p v-for="(item) in detailList.team_list.shopowner_data" :key="item">{{ item }}</p>
+        <h3>{{ detailList.team_list.shopping }}</h3>
+        <p v-for="(item) in detailList.team_list.shopping_data" :key="item">{{ item }}</p>
       </el-tab-pane>
       <el-tab-pane label="店铺设置">
         <h3>店铺设置</h3>
@@ -61,25 +61,25 @@
   </div>
 </template>
 <script>
-import { mapActions } from "vuex";
+import { mapActions } from 'vuex'
 export default {
   components: {},
   props: {},
   data() {
     return {
       detailList: {}
-    };
+    }
   },
   computed: {},
   async created() {
-    let { id } = this.$route.query;
-    let data = await this.getStoreInfos({ id });
-    this.detailList = data.base_info;
+    const { id } = this.$route.query
+    const data = await this.getStoreInfos({ id })
+    this.detailList = data.base_info
   },
   methods: {
-    ...mapActions("shopArcade", ["getStoreInfos"])
+    ...mapActions('shopArcade', ['getStoreInfos'])
   }
-};
+}
 </script>
 <style  lang="scss">
 html,

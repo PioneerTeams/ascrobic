@@ -4,14 +4,14 @@
       <div class="managementhead">店铺管理</div>
       <el-tabs v-model="activeName" class="managetabs">
         <el-tab-pane label="全部店铺" name="shop">
-            <allshop @sechfn="getstorelist"/>
+          <allshop @sechfn="getstorelist" />
           <tabs :table-data="tableData" :list="arr[activeName]" />
-          <pageqi :total="tabDatetotal" @currentpage="currentpage" />
+          <pageqi :totals="tabDatetotal" @currentpage="currentpage" />
         </el-tab-pane>
         <el-tab-pane label="e店铺" name="eshop">
-          <eshop @sechfn="getstorelist"/>
+          <eshop @sechfn="getstorelist" />
           <tabs :table-data="tableData" :list="arr[activeName]" />
-          <pageqi :total="tabDatetotal" @currentpage="currentpage" />
+          <pageqi :totals="tabDatetotal" @currentpage="currentpage" />
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -19,12 +19,7 @@
 </template>
 <script>
 import arr from './data/pages.js'
-import {
-  getFloorList,
-  getStoreList,
-  getBranchList,
-  getcategoryList
-} from '@/api/shopArcade.js'
+import { getStoreList } from '@/api/shopArcade.js'
 import tabs from './components/tabs'
 import pageqi from './components/fenpage'
 import allshop from './components/Allshop'
@@ -34,16 +29,14 @@ export default {
   props: {},
   data() {
     return {
-      activeName: 'shop',
-      selectArr: [],
       arr,
+      activeName: 'shop',
       tableData: [],
-      branlist: [],
-      categorys: [],
+      tabDatetotal: 10,
       formInline: { vm_store_name: '', floor_id: '', category_id: '' },
       formE: { design: '', quanxian: '', pinpai: '' },
-      fromdata: { page: 1, is_e_shop: '', store_type: '', scene_type: 1 },
-      tabDatetotal: 10
+      fromdata: { page: 1, is_e_shop: '', store_type: '', scene_type: 1 }
+
     }
   },
   computed: {},
@@ -53,10 +46,10 @@ export default {
   mounted() {},
   methods: {
     // 分页器
-    currentpage(val) { this.fromdata.page = val; this.$throttle( this.getstorelist, this.fromdata ); },
+    currentpage(val) { this.fromdata.page = val; this.$throttle(this.getstorelist, this.fromdata) },
     // 获取tabel 数据
-    async getstorelist(data) { const result = await getStoreList( data ); this.tableData = result.list; this.tabDatetotal = result.page.totalNum; },
-    
+    async getstorelist(data) { const result = await getStoreList(data); this.tableData = result.list; this.tabDatetotal = result.page.totalNum }
+
   }
 }
 </script>

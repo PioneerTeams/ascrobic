@@ -9,7 +9,7 @@ const actions = {
     const result = await getUserList(data)
     return result.list
   },
-  async getStoreInfos({ commit },data){
+  async getStoreInfos({ commit }, data) {
     const result = await getStoreInfo(data)
     return result
   }

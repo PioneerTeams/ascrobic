@@ -3,26 +3,35 @@
     class="pagesye"
     background
     layout="prev, pager, next"
-    :total="total"
+    :total="totals"
     @current-change="currentpages"
   />
 </template>
 <script>
 export default {
-  props: ['total','currentpage'],
   components: {},
+  props: {
+    totals: {
+      type: Number,
+      default: 10
+    },
+    currentpage: {
+      type: Function,
+      default: () => {}
+    }
+  },
   data() {
-    return {};
+    return {}
   },
   computed: {},
-  methods: {
-      currentpages(val){
-          this.$emit('currentpage',val)
-      }
-  },
   created() {},
-  mounted() {}
-};
+  mounted() {},
+  methods: {
+    currentpages(val) {
+      this.$emit('currentpage', val)
+    }
+  }
+}
 </script>
 <style scoped lang="">
 </style>
