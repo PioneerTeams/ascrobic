@@ -26,10 +26,10 @@
               </el-form-item>
             </el-form>
           </div>
-          <tabs :tableData="tableData" :list="title[activeName]" />
+          <tabs :table-data="tableData" :list="title[activeName]" />
         </el-tab-pane>
         <el-tab-pane label="邀请中" name="invitation">
-         <tabs :tableData="tableData" :list="title[activeName]" />
+          <tabs :table-data="tableData" :list="title[activeName]" />
         </el-tab-pane>
         <el-tab-pane label="角色描述" name="role">
           <div class="mangeTable">
@@ -56,13 +56,13 @@ import { mapState, mapActions } from 'vuex'
 import tabs from './components/exampleTabs'
 import title from './data/data'
 export default {
-  components: {tabs},
+  components: { tabs },
   props: {},
   data() {
     return {
       activeName: 'guide',
       formInline: { design: '', floor: '', classification: '' },
-      fromdata:{ type:2, page:1, status:'[0,1]' },
+      fromdata: { type: 2, page: 1, status: '[0,1]' },
       title,
       tableData: []
     }
@@ -73,10 +73,10 @@ export default {
   },
   mounted() {},
   methods: {
-    ...mapActions( 'shopArcade', ['getuserlist'] ),
+    ...mapActions('shopArcade', ['getuserlist']),
     handleClick(tab, event) {
       this.activeName = tab.name
-      if(tab.name==='invitation'){
+      if (tab.name === 'invitation') {
 
       }
     },
@@ -84,8 +84,8 @@ export default {
     onReset(rulesFrom) {
       this.$refs[rulesFrom].resetFields()
     },
-    goDetail(row, column, cell, event) {},
-    
+    goDetail(row, column, cell, event) {}
+
   }
 }
 </script>

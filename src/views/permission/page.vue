@@ -41,7 +41,7 @@
                   </el-option-group>
                 </el-select>
               </el-form-item>
-              <br />
+              <br>
               <el-form-item>
                 <el-button type="primary" @click="onSubmit">查询</el-button>
               </el-form-item>
@@ -56,8 +56,8 @@
             class="pagesye"
             background
             layout="prev, pager, next"
-            @current-change="currentpage"
             :total="tabDatetotal"
+            @current-change="currentpage"
           />
         </el-tab-pane>
         <el-tab-pane label="e店铺" name="eshop">
@@ -82,7 +82,7 @@
                   />
                 </el-select>
               </el-form-item>
-              <br />
+              <br>
               <el-form-item>
                 <el-button type="primary" @click="onSubmit">查询</el-button>
               </el-form-item>
@@ -99,81 +99,81 @@
   </div>
 </template>
 <script>
-import arr from "./data/pages.js";
+import arr from './data/pages.js'
 import {
   getFloorList,
   getStoreList,
   getBranchList,
   getcategoryList
-} from "@/api/shopArcade.js";
-import tabs from "./components/tabs";
+} from '@/api/shopArcade.js'
+import tabs from './components/tabs'
 export default {
   components: { tabs },
   props: {},
   data() {
     return {
-      activeName: "shop",
+      activeName: 'shop',
       selectArr: [],
-      formInline: { vm_store_name: "", floor_id: "", category_id: "" },
-      formE: { design: "", quanxian: "", pinpai: "" },
+      formInline: { vm_store_name: '', floor_id: '', category_id: '' },
+      formE: { design: '', quanxian: '', pinpai: '' },
       tableData: [],
       arr,
       branlist: [],
       categorys: [],
-      fromdata: { page: 1, is_e_shop: "", store_type: "", scene_type: 1 },
-      tabDatetotal:10
-    };
+      fromdata: { page: 1, is_e_shop: '', store_type: '', scene_type: 1 },
+      tabDatetotal: 10
+    }
   },
   computed: {},
   created() {
-    this.getFoor();
-    this.getstorelist(this.fromdata);
-    this.getBranchlistt();
-    this.getcategory();
+    this.getFoor()
+    this.getstorelist(this.fromdata)
+    this.getBranchlistt()
+    this.getcategory()
     console.log(this)
   },
   mounted() {},
   methods: {
     onSubmit() {
-      const obj = {};
+      const obj = {}
       for (const k in this.formInline) {
         if (this.formInline[k]) {
-          obj[k] = this.formInline[k];
+          obj[k] = this.formInline[k]
         }
       }
-      this.getstorelist(Object.assign(this.fromdata, obj));
+      this.getstorelist(Object.assign(this.fromdata, obj))
     },
     onReset(rulesFrom) {
-      const arr = Object.keys(this.formInline);
+      const arr = Object.keys(this.formInline)
       arr.forEach(item => {
-        this.formInline[item] = "";
-      });
-      Object.assign(this.fromdata, this.formInline);
+        this.formInline[item] = ''
+      })
+      Object.assign(this.fromdata, this.formInline)
     },
     currentpage(val) {
-      this.fromdata.page = val;
-      this.$throttle(this.getstorelist,this.fromdata)
+      this.fromdata.page = val
+      this.$throttle(this.getstorelist, this.fromdata)
     },
     goDetail(row) {},
     async getFoor() {
-      const result = await getFloorList();
-      this.selectArr = result.list;
+      const result = await getFloorList()
+      this.selectArr = result.list
     },
     async getstorelist(data) {
-      const result = await getStoreList(data);
-      this.tableData = result.list;
-      this.tabDatetotal = result.page.totalNum;
+      const result = await getStoreList(data)
+      this.tableData = result.list
+      this.tabDatetotal = result.page.totalNum
     },
     async getBranchlistt() {
-      const result = await getBranchList();
-      this.branlist = result;
+      const result = await getBranchList()
+      this.branlist = result
     },
     async getcategory() {
-      const result = await getcategoryList();
-      this.categorys = result;
+      const result = await getcategoryList()
+      this.categorys = result
     }
   }
-};
+}
 </script>
 <style scoped lang="scss">
 .management {

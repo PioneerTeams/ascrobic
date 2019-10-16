@@ -12,7 +12,7 @@ import '@/styles/index.scss' // global css
 import App from './App'
 import store from './store'
 import router from './router'
-import throttle from "./utils/throttle";
+import throttle from './utils/throttle'
 import './icons' // icon
 import './permission' // permission control
 import './utils/error-log' // error log

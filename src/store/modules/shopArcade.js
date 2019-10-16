@@ -1,19 +1,19 @@
-import {getUserList} from "../../api/shopArcade";
-const state={
-    userlist:[]
+import { getUserList } from '../../api/shopArcade'
+const state = {
+  userlist: []
 }
-const mutations={}
+const mutations = {}
 
-const actions={
-   async getuserlist({commit},data){
-       let result = await getUserList(data)
-       return result.list
-   }
+const actions = {
+  async getuserlist({ commit }, data) {
+    const result = await getUserList(data)
+    return result.list
+  }
 }
 
 export default {
-    namespaced: true,
-    state,
-    mutations,
-    actions
+  namespaced: true,
+  state,
+  mutations,
+  actions
 }
