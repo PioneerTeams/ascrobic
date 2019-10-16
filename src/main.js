@@ -12,7 +12,7 @@ import '@/styles/index.scss' // global css
 import App from './App'
 import store from './store'
 import router from './router'
-
+import throttle from "./utils/throttle";
 import './icons' // icon
 import './permission' // permission control
 import './utils/error-log' // error log
@@ -49,7 +49,7 @@ Vue.use(Element, {
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 })
-
+Vue.prototype.$throttle = throttle
 Vue.config.productionTip = false
 
 new Vue({

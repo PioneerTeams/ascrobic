@@ -22,7 +22,10 @@ export default {
     return {}
   },
   computed: {},
-  created() {},
+  created() {
+    console.log(this.tableData)
+    console.log(this.list)
+  },
   mounted() {},
   methods: {
     handleClick(tab, event) {

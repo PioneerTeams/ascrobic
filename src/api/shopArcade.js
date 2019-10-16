@@ -21,7 +21,7 @@ export async function getcategoryList() {
   return result.data
 }
 // 导购管理
-export async function getUserList() {
-  const result = await request({ url: '/store/user/list', method: 'post', baseURL: '/api' })
+export async function getUserList(data) {
+  const result = await request({ url: '/user/list', method: 'post', baseURL: '/api',data })
   return result.data
 }

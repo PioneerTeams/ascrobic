@@ -3,7 +3,7 @@
     <div class="managementTab">
       <div class="managementhead">导购管理</div>
       <el-tabs v-model="activeName" class="managetabs" @tab-click="handleClick">
-        <el-tab-pane label="导购管理" name="first">
+        <el-tab-pane label="导购管理" name="guide">
           <div class="mangeFrom">
             <el-form ref="formInline" :inline="true" :model="formInline" class="demo-form-inline">
               <el-form-item label="店铺名">
@@ -26,38 +26,12 @@
               </el-form-item>
             </el-form>
           </div>
-          <div class="mangeTable">
-            <el-table :data="tableData" style="width: 100%">
-              <el-table-column prop="name" label="店铺名称" width="120" />
-              <el-table-column prop="floor_name" label="楼层" width="120" />
-              <el-table-column prop="address" label="位置" width="120" />
-              <el-table-column prop="category_data" label="所属分类" width="120" />
-              <el-table-column prop="shop_manager" label="店长" />
-              <el-table-column prop="building" label="楼管" width="180" />
-              <el-table-column prop="status_str" label="状态" width="120" />
-              <el-table-column prop="address" label="操作" width="120">
-                <el-button type="text" size="small" @cell-click="goDetail">查看</el-button>
-              </el-table-column>
-            </el-table>
-          </div>
+          <tabs :tableData="tableData" :list="title[activeName]" />
         </el-tab-pane>
-        <el-tab-pane label="邀请中" name="invite">
-          <div class="mangeTable">
-            <el-table :data="tableData" style="width: 100%">
-              <el-table-column prop="name" label="店铺名称" width="120" />
-              <el-table-column prop="floor_name" label="楼层" width="120" />
-              <el-table-column prop="address" label="位置" width="120" />
-              <el-table-column prop="category_data" label="所属分类" width="120" />
-              <el-table-column prop="shop_manager" label="店长" />
-              <el-table-column prop="building" label="楼管" width="180" />
-              <el-table-column prop="status_str" label="状态" width="120" />
-              <el-table-column prop="address" label="操作" width="120">
-                <el-button type="text" size="small" @cell-click="goDetail">查看</el-button>
-              </el-table-column>
-            </el-table>
-          </div>
+        <el-tab-pane label="邀请中" name="invitation">
+         <tabs :tableData="tableData" :list="title[activeName]" />
         </el-tab-pane>
-        <el-tab-pane label="角色描述" name="second">
+        <el-tab-pane label="角色描述" name="role">
           <div class="mangeTable">
             <el-table :data="tableData" style="width: 100%">
               <el-table-column prop="name" label="店铺名称" width="120" />
@@ -78,57 +52,40 @@
   </div>
 </template>
 <script>
+import { mapState, mapActions } from 'vuex'
+import tabs from './components/exampleTabs'
+import title from './data/data'
 export default {
-  components: {},
+  components: {tabs},
   props: {},
   data() {
     return {
-      activeName: 'first',
-      formInline: {
-        design: '',
-        floor: '',
-        classification: ''
-      },
-      tableData: [
-        {
-          name: '拿美店仓',
-          floor_name: 'F4',
-          address: '4楼',
-          category_data: ['女装'],
-          shop_manager: '迎春,刘小哥,红杰,17600665361,15822294356',
-          building: '楼管,宋凯',
-          status_str: '有效',
-          id: 43529
-        },
-        {
-          name: '拿美店仓',
-          floor_name: 'F4',
-          address: '4楼',
-          category_data: ['女装'],
-          shop_manager: '迎春,刘小哥,红杰,17600665361,15822294356',
-          building: '楼管,宋凯',
-          status_str: '有效',
-          id: 43528
-        }
-      ]
+      activeName: 'guide',
+      formInline: { design: '', floor: '', classification: '' },
+      fromdata:{ type:2, page:1, status:'[0,1]' },
+      title,
+      tableData: []
     }
   },
   computed: {},
-  created() {
-    // console.log(this.$router)
+  async created() {
+    this.tableData = await this.getuserlist(this.fromdata)
   },
   mounted() {},
   methods: {
-    handleClick(tab, event) {},
+    ...mapActions( 'shopArcade', ['getuserlist'] ),
+    handleClick(tab, event) {
+      this.activeName = tab.name
+      if(tab.name==='invitation'){
+
+      }
+    },
     onSubmit() {},
     onReset(rulesFrom) {
-      console.log(rulesFrom)
-      console.log(this.$refs)
       this.$refs[rulesFrom].resetFields()
     },
-    goDetail(row, column, cell, event) {
-      console.log(row.id)
-    }
+    goDetail(row, column, cell, event) {},
+    
   }
 }
 </script>

@@ -1,77 +1,99 @@
 <template>
-  <div class="pagedetail">
-    <div class="pagedetailNav">
-      <img
-        src="https://img.weitaming.com/vm_brand/logo/20160726/8a50d1fe4aee6e224be1b103a9f88eb8.png"
-      >
-      <span class="pagedetailTitle">拿美店仓</span>
-    </div>
-    <div class="pagedetailBottom">
-      <el-container>
-        <el-aside width="100%">
-          <el-tabs tab-position="left" style="width: 200px">
-            <el-tab-pane label="基本信息">基本信息</el-tab-pane>
-            <el-tab-pane label="匹配设置">匹配设置</el-tab-pane>
-            <el-tab-pane label="e店铺设置">e店铺设置</el-tab-pane>
-            <el-tab-pane label="团队">团队</el-tab-pane>
-            <el-tab-pane label="店铺设置">店铺设置</el-tab-pane>
+    <div class="detail">
+      <!-- <Heads :title="detailList.name"></Heads> -->
+        <el-tabs tab-position="left" style="height: auto;">
+            <el-tab-pane label="基本信息" style="width: 400px;">
+                基本信息
+                <h3>店铺名称</h3>
+                <!-- <p>{{ detailList.name }}</p> -->
+                <h3>店铺电话</h3>
+                <h3>楼层</h3>
+                <!-- <p>{{ detailList.floor_name }}</p> -->
+                <h3>所属分类</h3>
+                <!-- <p>
+                    <span
+                        v-for="(item, index) in detailList.category_data"
+                        :key="index"
+                        >{{ item }}</span
+                    >
+                </p> -->
+                <h3>位置</h3>
+                <!-- <p>{{ detailList.address }}</p> -->
+                <h3>LOGO</h3>
+                <!-- <img
+                  style="height: auto;width:100px"
+                    v-if="detailList.r_logo_img"
+                    :src="detailList.r_logo_img"
+                    alt=""
+                 /> -->
+                <!-- <h3>背景图</h3> --> 
+                <!-- <img v-if="detailList.r_background_img" 
+                 style="height: auto;width:200px" :src="detailList.r_background_img" alt=""> -->
+                <h3>店铺描述</h3>
+                <!-- <p>{{ detailList.description }}</p> -->
+            </el-tab-pane>
+            <el-tab-pane label="匹配设置">
+              匹配设置
+              <!-- <p>{{detailList.matching_info}}</p> -->
+            </el-tab-pane>
+            <el-tab-pane label="e店铺设置">
+              <!-- e店铺设置
+              <p>{{detailList.e_store_info.titile}}</p> -->
+              <div>
+                <!-- <p v-for="(item,index) in detailList.e_store_info.titile_data" :key="index">{{item}}</p> -->
+                
+              </div>
+
+            </el-tab-pane>
+            <el-tab-pane label="团队">
+              团队
+             <!-- <h3>{{detailList.team_list.building}}</h3> -->
+             <!-- <p v-for="(item,index) in detailList.team_list.building_data" :key="index">
+               {{item}}
+             </p>
+              <h3>{{detailList.team_list.shopowner}}</h3>
+             <p v-for="(item,index) in detailList.team_list.shopowner_data" :key="index">
+               {{item}}
+             </p>
+               <h3>{{detailList.team_list.shopping}}</h3>
+             <p v-for="(item,index) in detailList.team_list.shopping_data" :key="index">
+               {{item}}
+             </p> -->
+            </el-tab-pane>
+            <el-tab-pane label="店铺设置">
+              <h3>店铺设置</h3>
+                <p>删除店铺，店铺信息将被移除，不可恢复，删除店铺前，请确认e店铺已关闭</p>
+                <el-button type="danger">删除店铺</el-button>
+            </el-tab-pane>
             <el-tab-pane label="操作历史">操作历史</el-tab-pane>
-          </el-tabs>
-        </el-aside>
-      </el-container>
+        </el-tabs>
     </div>
-  </div>
 </template>
 <script>
+import { mapState, mapActions } from "vuex";
+
+
 export default {
-  components: {},
-  props: {},
-  data() {
-    return {}
-  },
-  created() {
-    const { id } = this.$route.query
-    this.getPageDetails(id)
-  },
-  methods: {
-    async getPageDetails(id) {
-      console.log(id)
-    }
-  }
-}
+    props: {},
+    components: {},
+    data() {
+        return {};
+    },
+    computed: {},
+    methods: {},
+    created() {},
+    mounted() {}
+};
 </script>
-<style scoped lang="scss">
-.pagedetail {
+<style  lang="scss">
+html,body{
   width: 100%;
   height: 100%;
-  padding: 24px;
-  box-sizing: border-box;
-  background: #fcfcfc;
-  .pagedetailNav {
-    padding: 24px;
-    display: flex;
-    align-items: center;
-    background: #fff;
-    border-radius: 10px;
-    img {
-      width: 60px;
-      height: 60px;
-    }
-    .pagedetailTitle {
-      margin-left: 20px;
-    }
-  }
-  .pagedetailBottom {
-    display: flex;
-    width: 100%;
-    height: 600px;
-    .el-col-12 {
-      width: 100%;
-      height: 100%;
-    }
-    aside {
-      padding:24px;
-    }
-  }
+   background: #fcfcfc;
+}
+.detail{
+  width: 96%;
+  height: 100%;
+  background: #fff;
 }
 </style>
