@@ -124,7 +124,7 @@ export default {
           obj[k] = this.formInline[k]
         }
       }
-      console.log(12313)
+      console.log(Object.assign(this.fromdata, obj))
       this.getstorelist(Object.assign(this.fromdata, obj))
     },
     onReset(rulesFrom) {
@@ -132,6 +132,7 @@ export default {
       arr.forEach((item) => {
         this.formInline[item] = ''
       })
+      console.log(Object.assign(this.fromdata, this.formInline))
     },
     goDetail(row) {},
     async getFoor() {

@@ -20,4 +20,8 @@ export async function getcategoryList() {
   const result = await request({ url: '/store/category-list', method: 'post', baseURL: '/api' })
   return result.data
 }
-
+// 导购管理
+export async function getUserList() {
+  const result = await request({ url: '/store/user/list', method: 'post', baseURL: '/api' })
+  return result.data
+}
