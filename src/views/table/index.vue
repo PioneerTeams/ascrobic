@@ -20,7 +20,7 @@
           </div>
           <CommodityForm :activeName="activeName"/>
       </div>
-      <CommodityTable/>
+      <CommodityTable :activeName="activeName"/>
   </div>
 </template>
 

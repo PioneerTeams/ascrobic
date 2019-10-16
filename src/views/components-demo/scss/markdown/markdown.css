@@ -49,12 +49,10 @@
 
 .form-btns {
   display: flex;
+  justify-content: flex-end;
 }
 
-.form-btns .form-btns-left {
-  flex: 8;
-}
-
-.form-btns .form-btns-right {
-  flex: 2;
+.pagination {
+  display: flex;
+  justify-content: flex-end;
 }

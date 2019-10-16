@@ -1,22 +1,19 @@
+
+import { requestSubOrderInfo } from '@/api/order'
 const state = {
-  logs: []
+
 }
 
 const mutations = {
-  ADD_ERROR_LOG: (state, log) => {
-    state.logs.push(log)
-  },
-  CLEAR_ERROR_LOG: (state) => {
-    state.logs.splice(0)
-  }
+
 }
 
 const actions = {
-  addErrorLog({ commit }, log) {
-    commit('ADD_ERROR_LOG', log)
-  },
-  clearErrorLog({ commit }) {
-    commit('CLEAR_ERROR_LOG')
+  async subOrderInfoAction({ commit }, data) {
+    const result = await requestSubOrderInfo(data)
+    if (result.code === 200) {
+      return result.data
+    }
   }
 }
 

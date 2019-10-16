@@ -72,6 +72,7 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex'
     import { manageList } from '@/api/commodity'
 
     export default {
@@ -100,7 +101,7 @@
             }
         },
         mounted() {
-            this.getlist(this.num)
+            this.getlist(this.activeName)
         },
         methods: {
             getlist(num){
@@ -112,13 +113,10 @@
                 console.log('submit!');
             },
             resetForm(formName) {
-                this.$refs[formName].resetFields();
-            },
-            handleEdit(index, row) {
-                console.log(index, row);
-            },
-            handleDelete(index, row) {
-                console.log(index, row);
+                let arr = Object.keys(this.formInline)
+                arr.forEach((item)=>{
+                  this.formInline[item] = ""
+                })
             }
         },
         watch: {
