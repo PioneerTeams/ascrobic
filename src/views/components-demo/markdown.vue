@@ -62,7 +62,7 @@
                       v-for="(v) in value.options"
                       :key="v.name"
                       :label="v.name"
-                      :value="v.name"
+                      :value="v.id"
                     />
 
                     <el-option
@@ -86,9 +86,17 @@
                         v-for="(item,index) in v.children"
                         :key="index"
                         :label="item.title"
-                        :value="item.title"
+                        :value="item.value"
+                        @click="()=>changeStoreId(item.value)"
                       />
                     </el-option-group>
+                    <el-option
+                      v-for="(v) in brand.length&&brand"
+                      v-show="value.name=='brand'"
+                      :key="v.name"
+                      :label="v.name"
+                      :value="v.id"
+                    />
                   </component>
                 </el-form-item>
               </el-col>
@@ -110,11 +118,7 @@
             <el-table-column prop="pay_amount" label="实付金额" width="95" />
             <el-table-column fixed="right" label="操作" width="66">
               <template slot-scope="scope">
-                <el-button
-                  type="text"
-                  size="small"
-                  @click="handleClick(scope.row)"
-                >查看</el-button>
+                <el-button type="text" size="small" @click="handleClick(scope.row)">查看</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -144,6 +148,7 @@ export default {
       activeIndex2: '1',
       floor: [],
       store: [],
+      brand: [],
       subOrderList: [],
       currentPage1: 1,
       totalPages: 0,
@@ -220,15 +225,15 @@ export default {
               },
               {
                 name: '线上pos',
-                order_type: 1
+                id: 1
               },
               {
                 name: '电商订单',
-                order_type: 0
+                id: 0
               },
               {
                 name: '电子卡券',
-                order_type: 2
+                id: 2
               }
             ]
           },
@@ -248,10 +253,13 @@ export default {
                 name: '全部'
               },
               {
-                name: '总仓'
+                name: '总仓',
+                id: 2
               },
               {
-                name: '店仓'
+                name: '店仓',
+                id: 1
+
               }
             ]
           },
@@ -320,7 +328,7 @@ export default {
     this.getSubOrder()
   },
   methods: {
-    ...mapActions('order', ['subOrderInfoAction']),
+    ...mapActions('order', ['subOrderInfoAction', 'subOrderListAction']),
     handleSelect(key, keyPath) {
       console.log(key, keyPath, 'l')
     },
@@ -332,7 +340,8 @@ export default {
       this.currentPage1 = 1
     },
     submit() {
-      console.log(this.form, 'this.form')
+      this.page = 1
+      this.getSubOrder(this.index, 1)
     },
     // 点击查看
     handleClick(row) {
@@ -354,6 +363,7 @@ export default {
     changeFloorId(id) {
       this.floor_id = id
     },
+    // 获取form表单用到的数据
     async getOrderSearch(index = 0) {
       const data = {
         org_id: 61500,
@@ -369,30 +379,40 @@ export default {
       })
       this.floor = result.data.floor
       this.store = result.data.store
+      this.brand = result.data.brand
       console.log(result, 'eeeeee')
       return result
     },
     async getSubOrder(index = 0, page = 1) {
+      const { shopOrderNumber, name, tel, orderType, orderNumber, sourceType, store, floor, brand, goodsNumber, goodsName, orderTime, paymentTime } = this.form
+      const order_pay_time = paymentTime.length ? paymentTime.map((item) => item.toLocaleDateString().replace(/\//g, '-')) : []
+      const submit_time = orderTime.length ? orderTime.map((item) => item.toLocaleDateString().replace(/\//g, '-')) : []
+      console.log(orderType, 'orderTypez')
       const data = {
         org_id: 61500,
         page,
         org_type: 5,
-        status: index
+        status: index, // 控制tab切换
+        sub_number: shopOrderNumber,
+        delivery_name: name,
+        delivery_tel: tel,
+        order_type: orderType,
+        order_number: orderNumber,
+        source_type: sourceType,
+        vm_store_id: store,
+        floor_id: floor,
+        brand_id: brand,
+        prod_code: goodsNumber,
+        prod_name: goodsName,
+        submit_time: JSON.stringify(submit_time),
+        order_pay_time: JSON.stringify(order_pay_time)
+
       }
-      const result = await request({
-        url: '/order/get-sub-order-list',
-        baseURL: '/api',
-        method: 'post',
-        headers: { 'content-type': 'application/x-www-form-urlencoded' },
-        data: qs.stringify(data)
-      })
+      const result = await this.subOrderListAction(data)
       console.log(result, 'lllll')
-      if (result.code === 200) {
-        this.subOrderList = result.data.list
-        this.totalPages = result.data.page.totalPages
-        this.totalNum = result.data.page.totalNum
-      }
-      return result
+      this.subOrderList = result.list
+      this.totalPages = result.page.totalPages
+      this.totalNum = result.page.totalNum
     }
   }
 }
