@@ -1,4 +1,4 @@
-import { getUserList } from '../../api/shopArcade'
+import { getUserList, getStoreInfo } from '../../api/shopArcade'
 const state = {
   userlist: []
 }
@@ -8,6 +8,10 @@ const actions = {
   async getuserlist({ commit }, data) {
     const result = await getUserList(data)
     return result.list
+  },
+  async getStoreInfos({ commit },data){
+    const result = await getStoreInfo(data)
+    return result
   }
 }
 

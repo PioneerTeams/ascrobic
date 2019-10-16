@@ -1,64 +1,55 @@
 <template>
   <div class="detail">
-    <!-- <Heads :title="detailList.name"></Heads> -->
     <el-tabs tab-position="left" style="height: auto;">
       <el-tab-pane label="基本信息" style="width: 400px;">
         基本信息
         <h3>店铺名称</h3>
-        <!-- <p>{{ detailList.name }}</p> -->
+        <p>{{ detailList.name }}</p>
         <h3>店铺电话</h3>
         <h3>楼层</h3>
-        <!-- <p>{{ detailList.floor_name }}</p> -->
+        <p>{{ detailList.floor_name }}</p>
         <h3>所属分类</h3>
-        <!-- <p>
-                    <span
-                        v-for="(item, index) in detailList.category_data"
-                        :key="index"
-                        >{{ item }}</span
-                    >
-                </p> -->
+        <p>
+          <span v-for="(item, index) in detailList.category_data" :key="index">{{ item }}</span>
+        </p>
         <h3>位置</h3>
-        <!-- <p>{{ detailList.address }}</p> -->
+        <p>{{ detailList.address }}</p>
         <h3>LOGO</h3>
-        <!-- <img
-                  style="height: auto;width:100px"
-                    v-if="detailList.r_logo_img"
-                    :src="detailList.r_logo_img"
-                    alt=""
-                 /> -->
-        <!-- <h3>背景图</h3> -->
-        <!-- <img v-if="detailList.r_background_img"
-                 style="height: auto;width:200px" :src="detailList.r_background_img" alt=""> -->
+        <img
+          style="height: auto;width:100px"
+          v-if="detailList.r_logo_img"
+          :src="detailList.r_logo_img"
+          alt
+        /> -
+        <h3>背景图</h3>
+        <img
+          v-if="detailList.r_background_img"
+          style="height: auto;width:200px"
+          :src="detailList.r_background_img"
+          alt
+        />
         <h3>店铺描述</h3>
-        <!-- <p>{{ detailList.description }}</p> -->
+        <p>{{ detailList.description }}</p>
       </el-tab-pane>
       <el-tab-pane label="匹配设置">
         匹配设置
-        <!-- <p>{{detailList.matching_info}}</p> -->
+        <p>{{detailList.matching_info}}</p>
       </el-tab-pane>
       <el-tab-pane label="e店铺设置">
-        <!-- e店铺设置
-              <p>{{detailList.e_store_info.titile}}</p> -->
-        <div>
-          <!-- <p v-for="(item,index) in detailList.e_store_info.titile_data" :key="index">{{item}}</p> -->
-
+        e店铺设置
+        <p v-if="detailList.e_store_info.titile">{{detailList.e_store_info.titile}}</p>
+        <div v-if="detailList.e_store_info.titile_data">
+          <p v-for="(item,index) in detailList.e_store_info.titile_data" :key="index">{{item}}</p>
         </div>
-
       </el-tab-pane>
       <el-tab-pane label="团队">
         团队
-        <!-- <h3>{{detailList.team_list.building}}</h3> -->
-        <!-- <p v-for="(item,index) in detailList.team_list.building_data" :key="index">
-               {{item}}
-             </p>
-              <h3>{{detailList.team_list.shopowner}}</h3>
-             <p v-for="(item,index) in detailList.team_list.shopowner_data" :key="index">
-               {{item}}
-             </p>
-               <h3>{{detailList.team_list.shopping}}</h3>
-             <p v-for="(item,index) in detailList.team_list.shopping_data" :key="index">
-               {{item}}
-             </p> -->
+        <h3>{{detailList.team_list.building}}</h3>
+        <p v-for="(item) in detailList.team_list.building_data" :key="item">{{item}}</p>
+        <h3>{{detailList.team_list.shopowner}}</h3>
+        <p v-for="(item) in detailList.team_list.shopowner_data" :key="item">{{item}}</p>
+        <h3>{{detailList.team_list.shopping}}</h3>
+        <p v-for="(item) in detailList.team_list.shopping_data" :key="item">{{item}}</p>
       </el-tab-pane>
       <el-tab-pane label="店铺设置">
         <h3>店铺设置</h3>
@@ -70,27 +61,34 @@
   </div>
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
-
+import { mapActions } from "vuex";
 export default {
   components: {},
   props: {},
   data() {
-    return {}
+    return {
+      detailList: {}
+    };
   },
   computed: {},
-  created() {},
-  mounted() {},
-  methods: {}
-}
+  async created() {
+    let { id } = this.$route.query;
+    let data = await this.getStoreInfos({ id });
+    this.detailList = data.base_info;
+  },
+  methods: {
+    ...mapActions("shopArcade", ["getStoreInfos"])
+  }
+};
 </script>
 <style  lang="scss">
-html,body{
+html,
+body {
   width: 100%;
   height: 100%;
-   background: #fcfcfc;
+  background: #fcfcfc;
 }
-.detail{
+.detail {
   width: 96%;
   height: 100%;
   background: #fff;
