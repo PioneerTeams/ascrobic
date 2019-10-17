@@ -16,7 +16,6 @@ const mutations = {
     state.cateGoryList = payload
   },
   setTableList(state, payload) {
-    console.log(payload)
     state.tableList = payload
   }
 }

@@ -1,9 +1,10 @@
-import { getAttrStoreListRequest, getAttrListRequest, getCateGoryListRequest } from '@/api/table/inline-edit-table'
+import { getAttrStoreListRequest, getAttrListRequest, getCateGoryListRequest ,getThreeLevelListRequest } from '@/api/table/inline-edit-table'
 
 const state = {
   attrStoreList: [],
   attrList: [],
-  cateGoryList: []
+  cateGoryList: [],
+  threeLevelList:[]
 }
 
 const mutations = {
@@ -14,7 +15,11 @@ const mutations = {
     state.attrList = payload
   },
   setCateGoryList(state, payload) {
+    console.log(payload)
     state.cateGoryList = payload
+  },
+  setThreeLevelList(state,payload){
+    state.threeLevelList = payload
   }
 }
 
@@ -32,7 +37,12 @@ const actions = {
   async getCateGoryListAction({ commit }, params) {
     const result = await getCateGoryListRequest(params)
     const data = result.data.list
-    commit('')
+    commit('setCateGoryList',data)
+  },
+  async getThreeLevelListAction({ commit }){
+    const result = await getThreeLevelListRequest()
+    const data = result.data
+    commit('setThreeLevelList',data)
   }
 }
 

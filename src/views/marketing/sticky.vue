@@ -202,6 +202,7 @@ export default {
     ]),
 
     submit() {
+      
       const {
         vm_store_name,
         floor_id,
@@ -213,7 +214,17 @@ export default {
       const obj = {}
       for (const key in this.form) {
         if (this.form[key]) {
-          obj[key] = this.form[key]
+           if(this.form['start_data']){
+             this.form['start_data'].forEach((item,index)=>{
+               obj[`start_data[${index}]`]=item.toLocaleDateString().replace(/\//g,"-")
+             })
+           }else if(this.form['end_data']) {
+               this.form['end_data'].forEach((item,index)=>{
+               obj[`end_data[${index}]`]=item.toLocaleDateString().replace(/\//g,"-")
+             })
+           }else{
+              obj[key] = this.form[key]
+           }
           this.getTableList({ page: this.currentPage, ...obj })
         }
       }

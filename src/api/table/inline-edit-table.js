@@ -25,3 +25,11 @@ export function getCateGoryListRequest(params) {
     data: qs.stringify(params)
   })
 }
+
+export function getThreeLevelListRequest(){
+  return request({
+    url:"/AttrItem/getThreeLevelCategory",
+    method:'post',
+    baseURL:'/api'
+  })
+}

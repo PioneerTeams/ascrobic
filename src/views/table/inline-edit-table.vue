@@ -13,8 +13,8 @@
         <h3 v-text="flag?'自维护销售属性值管理':'查看分类与属性组关系'" />
       </div>
       <div class="edit-nav-select">
-        <span class="active">规格值列表</span>
-        <span>分类与属性组关系</span>
+        <span @click="changeList(true)" :class="flag?'active':''">规格值列表</span>
+        <span @click="changeList(false)" :class="!flag?'active':''" >分类与属性组关系</span>
       </div>
       <div class="edit-group">
         <el-form ref="form" :model="form" label-width="120px">
@@ -26,20 +26,19 @@
                   v-model="form[value.name]"
                   :placeholder="value.placeholder"
                   style="width:200px;"
-                  :options="options"
                 >
                   <!----  根据value.is判断渲染Ipt组件还是select组件 ---->
                   <el-option
-                    v-for="(v,k) in attrStoreList"
+                    v-for="(v) in attrStoreList"
                     v-show="value.name == 'storeId'"
-                    :key="k.id"
+                    :key="v.id+'cc'"
                     :label="v.name"
                     :value="v.id"
                   />
                   <el-option
                     v-for="(val) in value.list"
                     v-show="value.name == 'status'"
-                    :key="val.name"
+                    :key="val.value+'vv'"
                     :label="val.name"
                     :value="val.value"
                   />
@@ -47,10 +46,23 @@
                   <el-option
                     v-for="val in attrList"
                     v-show="value.name == 'attrId'"
-                    :key="val.attr_id"
+                    :key="val.attr_id+'ss'"
                     :label="val.attr_name"
                     :value="val.attr_id"
                   />
+                   <el-option-group
+                    v-for="(group,gid) in threeLevelList"
+                    v-show="value.name == 'father_id'"
+                    :key="gid"
+                    :label="group.title"
+                  >
+                    <el-option
+                      v-for="(ite,ind) in group.children"
+                      :key="ind"
+                      :label="ite.title"
+                      :value="ite.father_id"
+                    />
+                  </el-option-group>
                   <!---  渲染下拉框的每一项  ---->
                 </component>
               </el-form-item>
@@ -68,7 +80,7 @@
         </el-row>
         <el-table
           ref="multipleTable"
-          :data="tableData"
+          :data="tabList"
           tooltip-effect="dark"
           style="width: 100%"
           @selection-change="handleSelectionChange"
@@ -84,23 +96,20 @@
         </el-table>
         <el-row class="table-btm">
           <div style="margin-top: 20px">
-            <el-button disabled="true" @click="toggleSelection([tableData[1], tableData[2]])">当页全选</el-button>
-            <el-button disabled="true" @click="toggleSelection()">删除</el-button>
+            <el-button :disabled="true" @click="toggleSelection()">当页全选</el-button>
+            <el-button :disabled="true" @click="toggleSelection()">删除</el-button>
           </div>
           <el-pagination
-            :current-page.sync="currentPage1"
             :page-size="0"
             layout="total, prev, pager, next"
             :total="0"
             style="margin-top: 20px"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
           />
         </el-row>
       </div>
       <div v-show="flag===false" class="edit-list">
-        <el-table :data="tableData" style="width: 100%" :row-class-name="tableRowClassName">
-          <el-table-column prop="date" label="分类" />
+        <el-table :data="cateGoryList" style="width: 100%" >
+          <el-table-column prop="title" label="分类"  />
           <el-table-column fixed="right" label="操作">
             <template slot-scope="scope">
               <el-button type="text" size="small" @click="handleClick(scope.row)">查看销售属性</el-button>
@@ -121,6 +130,7 @@ export default {
   data() {
     return {
       flag: true,
+      tabList:[],
       form: {
         storeId: '', // 所属门店
         status: '', // 状态
@@ -172,7 +182,7 @@ export default {
             label: '分类',
             name: 'father_id',
             placeholder: '请选择',
-            is: 'el-cascader'
+            is: 'el-select'
           }
         ]
       ],
@@ -201,7 +211,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('inline-edit-table', ['attrStoreList', 'attrList'])
+    ...mapState('inline-edit-table', ['attrStoreList', 'attrList','cateGoryList','threeLevelList'])
   },
   created() {
     this.getAttrStoreListAction()
@@ -210,15 +220,28 @@ export default {
   methods: {
     ...mapActions('inline-edit-table', [
       'getAttrStoreListAction',
-      'getAttrListAction'
+      'getAttrListAction',
+      'getCateGoryListAction',
+      'getThreeLevelListAction'
     ]),
     submit() {},
     reset() {},
-    handleSelectionChange() {}
+    handleSelectionChange() {},
+    toggleSelection(){},
+    handleClick(){},
+    changeList(flag){
+      if(flag){
+        this.flag=true
+      }else{
+        this.flag=false
+        this.getCateGoryListAction()
+        this.getThreeLevelListAction()
+      }
+    }
   }
 }
 </script>
 
 <style scoped>
-@import url("./scss/inline-edit.css");
+@import url("./scss/edit/inline-edit.css");
 </style>
