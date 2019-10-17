@@ -20,11 +20,6 @@ export async function getcategoryList() {
   const result = await request({ url: '/store/category-list', method: 'post', baseURL: '/api' })
   return result.data
 }
-// 导购管理
-export async function getUserList(data) {
-  const result = await request({ url: '/user/list', method: 'post', baseURL: '/api', data })
-  return result.data
-}
 // 店铺详情
 export async function getStoreInfo(data) {
   const result = await request({ url: '/store/get-store-info', method: 'post', baseURL: '/api', data })
@@ -37,7 +32,10 @@ export async function getStorePowerList() {
 }
 
 // 导购管理
-
+export async function getUserList(data) {
+  const result = await request({ url: '/user/list', method: 'post', baseURL: '/api', data })
+  return result.data
+}
 // 导购管理
 export async function getListSeach(data) {
   const result = await request({ url: '/user/list-sreach', method: 'post', baseURL: '/api', data })
