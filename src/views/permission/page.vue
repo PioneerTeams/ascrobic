@@ -45,9 +45,17 @@ export default {
   mounted() {},
   methods: {
     // 分页器
-    currentpage(val) { this.fromdata.page = val; this.$throttle(this.getstorelist, this.fromdata) },
+    currentpage(val) {
+      this.fromdata.page = val
+      this.$throttle(this.getstorelist, this.fromdata)
+    },
     // 获取tabel 数据
-    async getstorelist(data) { const result = await getStoreList(data); this.tableData = result.list; this.tabDatetotal = result.page.totalNum }
+    async getstorelist(data) {
+      const result = await getStoreList(data)
+      console.log(`%c${JSON.stringify(result)}`, 'color:skyblue')
+      this.tableData = result.list
+      this.tabDatetotal = result.page.totalNum
+    }
   }
 }
 </script>

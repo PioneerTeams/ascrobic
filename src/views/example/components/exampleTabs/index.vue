@@ -1,7 +1,12 @@
 <template>
   <div class="mangeTable">
     <el-table :data="tableData" style="width: 100%" @cell-click="handleClick">
-      <el-table-column v-for="(ele,index) in list" :key="index" :prop="ele.prop?ele.prop:'无'" :label="ele.label" />
+      <el-table-column
+        v-for="(ele,index) in list"
+        :key="index"
+        :prop="ele.prop?ele.prop:'无'"
+        :label="ele.label"
+      />
       <el-table-column label="操作" width="120">
         <el-button type="text" size="small">查看</el-button>
       </el-table-column>
@@ -38,11 +43,11 @@ export default {
 }
 </script>
 <style scoped lang="scss">
- .mangeTable {
-    margin-top: 24px;
-    padding: 24px;
-    background: #fff;
-    text-align: center;
-    border-radius: 10px;
-  }
+.mangeTable {
+  margin-top: 24px;
+  padding: 24px;
+  background: #fff;
+  text-align: center;
+  border-radius: 10px;
+}
 </style>

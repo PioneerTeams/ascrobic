@@ -3,7 +3,9 @@
     <div class="managementTab">
       <div class="managementhead">导购管理</div>
       <el-tabs v-model="activeName" class="managetabs">
-        <el-tab-pane label="导购管理" name="guide" />
+        <el-tab-pane label="导购管理" name="guide">
+          <guide />
+        </el-tab-pane>
         <el-tab-pane label="邀请中" name="inivte" />
         <el-tab-pane label="角色描述" name="desc" />
       </el-tabs>
@@ -11,23 +13,19 @@
   </div>
 </template>
 <script>
-
+import guide from './components/guideShop'
 export default {
-  components: { },
+  components: { guide },
   props: {},
   data() {
     return {
-      activeName: 'shop'
+      activeName: 'guide'
     }
   },
   computed: {},
-  created() {
-
-  },
+  created() {},
   mounted() {},
-  methods: {
-
-  }
+  methods: {}
 }
 </script>
 <style scoped lang="scss">
