@@ -202,6 +202,7 @@ export default {
     ]),
 
     submit() {
+      
       const {
         vm_store_name,
         floor_id,
@@ -210,11 +211,21 @@ export default {
         start_data,
         end_data
       } = this.form
-      let obj={}
-        for(let key in this.form){
-        if(this.form[key]){
-        obj[key]=this.form[key]
-          this.getTableList({page:this.currentPage,...obj})
+      const obj = {}
+      for (const key in this.form) {
+        if (this.form[key]) {
+           if(this.form['start_data']){
+             this.form['start_data'].forEach((item,index)=>{
+               obj[`start_data[${index}]`]=item.toLocaleDateString().replace(/\//g,"-")
+             })
+           }else if(this.form['end_data']) {
+               this.form['end_data'].forEach((item,index)=>{
+               obj[`end_data[${index}]`]=item.toLocaleDateString().replace(/\//g,"-")
+             })
+           }else{
+              obj[key] = this.form[key]
+           }
+          this.getTableList({ page: this.currentPage, ...obj })
         }
       }
       // this.getTableList({
@@ -228,18 +239,16 @@ export default {
       //   'end_data[0]': end_data[0],
       //   'end_data[1]': end_data[1]
       // })
-      
     },
     reset() {
-    
-      let obj= Object.entries(this.form).map(item=>{
-        return [item[0],'']
+      const obj = Object.entries(this.form).map(item => {
+        return [item[0], '']
       })
-      obj.forEach((item)=>{
-        this.form[item[0]]=item[1]
+      obj.forEach((item) => {
+        this.form[item[0]] = item[1]
       })
-    
-       this.getTableList({ page:this.currentPage })
+
+      this.getTableList({ page: this.currentPage })
     },
     handleClick(data) {},
     currentChange(page) {

@@ -13,6 +13,7 @@ const service = axios.create({
     'x-org-type': 5,
     'x-user-id': 963245015
   },
+
   timeout: 5000 // request timeout
 })
 
