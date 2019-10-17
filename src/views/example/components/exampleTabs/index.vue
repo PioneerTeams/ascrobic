@@ -38,4 +38,11 @@ export default {
 }
 </script>
 <style scoped lang="scss">
+ .mangeTable {
+    margin-top: 24px;
+    padding: 24px;
+    background: #fff;
+    text-align: center;
+    border-radius: 10px;
+  }
 </style>

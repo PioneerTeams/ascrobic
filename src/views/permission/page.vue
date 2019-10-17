@@ -36,7 +36,6 @@ export default {
       formInline: { vm_store_name: '', floor_id: '', category_id: '' },
       formE: { design: '', quanxian: '', pinpai: '' },
       fromdata: { page: 1, is_e_shop: '', store_type: '', scene_type: 1 }
-
     }
   },
   computed: {},
@@ -49,7 +48,6 @@ export default {
     currentpage(val) { this.fromdata.page = val; this.$throttle(this.getstorelist, this.fromdata) },
     // 获取tabel 数据
     async getstorelist(data) { const result = await getStoreList(data); this.tableData = result.list; this.tabDatetotal = result.page.totalNum }
-
   }
 }
 </script>

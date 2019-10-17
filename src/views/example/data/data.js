@@ -1,26 +1,29 @@
 const obj = {
   guide: [
     {
-      'label': '头像',
-      'prop': 'img'
-    }, {
       'label': '姓名',
-      'prop': 'user_name'
+      'prop': 'user_name',
+      'w': 100
     }, {
       'label': '手机号',
-      'prop': 'mobile'
+      'prop': 'mobile',
+      'w': 100
     }, {
       'label': '角色',
-      'prop': 'role'
+      'prop': 'role',
+      'w': 100
     }, {
       'label': '所属店铺',
-      'prop': 'store_name'
+      'prop': 'store_name',
+      'w': 100
     }, {
       'label': '顾客账号',
-      'prop': 'relation_user'
+      'prop': 'relation_user',
+      'w': 100
     }, {
       'label': '状态',
-      'prop': 'status'
+      'prop': 'status',
+      'w': 100
     }
   ],
   invitation: [
