@@ -35,3 +35,16 @@ export async function getStorePowerList() {
   const result = await request({ url: '/store/get-store-power-list', method: 'post', baseURL: '/api' })
   return result.data
 }
+
+// 导购管理
+
+// 导购管理
+export async function getListSeach(data) {
+  const result = await request({ url: '/user/list-sreach', method: 'post', baseURL: '/api', data })
+  return result.data
+}
+// 导购管理-角色
+export async function getDescList(data) {
+  const result = await request({ url: '/role/role-desc-list', method: 'post', baseURL: '/api', data })
+  return result.data
+}
