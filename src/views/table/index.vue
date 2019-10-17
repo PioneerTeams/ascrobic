@@ -20,14 +20,15 @@
           </div>
           <CommodityForm :activeName="activeName"/>
       </div>
-      <CommodityTable :activeName="activeName"/>
+      <CommodityTable :show="show" :activeName="activeName" :tableData="tableData" :count="count"/>
   </div>
 </template>
 
 <script>
-import { manageList } from '@/api/commodity'
+import { tableList } from '@/api/commodity'
 import CommodityForm from '@/components/Commodity/form'
 import CommodityTable from '@/components/Commodity/table'
+import { mapState } from 'vuex'
 
 export default {
   name: 'DynamicTable',
@@ -50,12 +51,42 @@ export default {
         label:'未通过审核'
       }],
       activeName: 4,
+      tableData: [],
+      count:0,
+      show:true,
     }
   },
+  computed: {
+    ...mapState('commodity',['page','list'])
+  },
   components: { CommodityForm, CommodityTable },
+  mounted() {
+    this.getTable()
+  },
   methods: {
     handleClick(tab) {
       this.activeName=tab
+    },
+    // 初始化表格数据
+    getTable(){
+        tableList(this.activeName,this.page).then(res=>{
+            this.count=res.data.pagination.count
+            this.tableData=res.data.list
+            const stock=res.data.list.map(item=>item.sku_stock_num)
+            const num=res.data.list.map(item=>item.sku_nums)
+            this.tableData.map((item,i)=>item.stock=`${num[i]}个SKU${stock[i]}个库存`)
+        })
+    },
+  },
+  watch: {
+    page(size){
+        this.getTable(this.num,size)
+    },
+    list(list){
+        this.tableData=list
+        const stock=list.map(item=>item.sku_stock_num)
+        const num=list.map(item=>item.sku_nums)
+        this.tableData.map((item,i)=>item.stock=`${num[i]}个SKU${stock[i]}个库存`)
     }
   },
 }
@@ -121,50 +152,5 @@ export default {
     .nav-selected /deep/ .el-tabs__item:hover{
       color: #3ec6b6;
     }
-    // .card-group{
-    //   padding: 24px;
-    //   border-bottom: 1px solid #e8e8e8;
-    //   .el-input{
-    //    width: 250px;
-    //   }
-    //   .el-date-editor{
-    //     width: 250px;
-    //   }
-    //   .el-select{
-    //     width: 250px;
-    //   }
-    //   .last-formItem{
-    //     display: block;
-    //     text-align: right;
-    //   }
-    //   .el-button--primary{
-    //     background: #3ec6b6;
-    //     border: 1px solid #3ec6b6;
-    //   }
-    // }
   }
-  // .table-content{
-  //   margin-top: 24px;
-  //   padding: 24px;
-  //   background-color: #fff;
-  //   .btn-add{
-  //     width: 34px;
-  //     height: 34px;
-  //     background: #3ec6b6;
-  //     border-radius: 50%;
-  //     color: #fff;
-  //     font-size: 30px;
-  //     margin-bottom: 24px;
-  //     text-align: center;
-  //     line-height: 34px;
-  //     font-weight: 200;
-  //     cursor: pointer;
-  //   }
-  //   .table-wrap{
-  //     margin: 24px 0;
-  //   }
-  //   .paging{
-  //     float: right;
-  //   }
-  // }
 </style>

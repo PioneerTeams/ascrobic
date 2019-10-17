@@ -58,33 +58,55 @@
                     </div>
                     <div class="list">
                         <span>商品分类</span>
-                        <el-input class="setWidth" :value="detail.standard_category_name" :disabled="true"></el-input>
-                        <el-cascader :options="options">
-                            <template slot-scope="{ node, data }">
-                                <span>{{ data.label }}</span>
-                                <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
-                            </template>
+                        <el-cascader
+                            class="setWidth"
+                            :props="defaultParams"
+                            :options="options"
+                            v-model="selectedOptions">
                         </el-cascader>
                     </div>
                 </div>
                 <div class="basic">
                     <h3>价格库存</h3>
                     <div class="list">
-                        <span>商品类型</span>
+                        <span>商品规格</span>
                         <div class="typeRight">
-                            <div class="sku-item" v-for="item in detail.sale_attr" :key="item.id">
+                            <div class="sku-item" v-for="(item,i) in detail.sale_attr" :key="item.id">
                                 <div class="list">
                                     <span>规格名:</span>
-                                    <span>{{item.name}}</span>
+                                    <el-select class="list-item" disabled v-model="detail.sale_attr[0].name" placeholder="请选择">
+                                        <el-option
+                                            v-for="item in detail.sale_attr[0].values"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.name">
+                                        </el-option>
+                                    </el-select>
+                                    <el-checkbox v-show="i==0" v-model="checked" style="margin-top: 5px;" @change="addImg">添加规格图片</el-checkbox>
                                 </div>
                                 <div class="list">
                                     <span>规格值:</span>
                                     <div class="list-item" v-for="obj in item.values" :key="obj.id">
-                                        <span>{{obj.name}}</span>
-                                        <div class="list-item-img" v-show="obj.image_url">
+                                        <el-input placeholder="请输入内容" v-model="obj.name" :disabled="true"></el-input>
+                                        <div class="list-item-img" v-show="obj.image_url" v-if="checked">
                                             <img :src="obj.image_url" alt="">
                                         </div>
                                     </div>
+                                    <div class="list-item" v-show="isShow">
+                                        <el-input placeholder="请输入内容" v-model="input"></el-input>
+                                        <el-upload
+                                            v-show="i==0"
+                                            action="https://jsonplaceholder.typicode.com/posts/"
+                                            list-type="picture-card"
+                                            :on-preview="PictureCardPreview"
+                                            :on-remove="Remove">
+                                            <i class="el-icon-plus"></i>
+                                        </el-upload>
+                                        <el-dialog :visible.sync="visible">
+                                            <img width="100%" :src="imageUrl" alt="">
+                                        </el-dialog>
+                                    </div>
+                                    <span style="cursor: pointer; color: #1890ff; margin-left: 10px; margin-top: 5px;" @click="addSize">添加规格值</span>
                                 </div>
                             </div>
                         </div>
@@ -98,7 +120,8 @@
                                     :key="i"
                                     :prop="item.key"
                                     :label="item.tit"
-                                    width="180">
+                                    width="180"
+                                >
                                 </el-table-column>
                             </el-table>
                         </div>
@@ -106,47 +129,89 @@
                 </div>
                 <div class="basic">
                     <h3>物流信息</h3>
-                    <div class="list">
-                        <span>配送方式</span>
+                    <div>
+                        <el-checkbox
+                            v-for="item in basicList.delivery"
+                            :key="item.id"
+                            v-model="deliveryCheck"
+                            @change="deliveryChange(item.id)"
+                        >{{item.name}}</el-checkbox>
+                        <dl class="pre-time" v-show="pre">
+                            <dt>备货时间</dt>
+                            <dd>
+                                <el-radio 
+                                    v-for="item in basicList.processing_time"
+                                    :key="item.id"
+                                    v-model="radio" 
+                                    :label="item.id">{{item.name}}</el-radio>
+                            </dd>
+                        </dl>
                     </div>
                 </div>
                 <div class="basic">
                     <h3>商品信息</h3>
-                    <div class="list">
-                        <span>商品分类</span>
-                        <span v-for="item in detail.base_attr" :key="item.id">{{item.values_str}}</span>
+                    <div class="list" v-for="item in shopList.base_attr" :key="item.id">
+                        <span>{{item.name}}</span>
+                        <el-select class="list-select" v-model="value" placeholder="请选择" v-show="item.type==1||item.type==2">
+                            <el-option
+                                v-for="obj in item.values"
+                                :key="obj.id"
+                                :label="obj.name"
+                                :value="obj.name">
+                            </el-option>
+                        </el-select>
+                        <el-input class="list-select" v-model="iptVal" placeholder="请输入" v-show="item.type==3"/>
                     </div>
                     <div class="list">
                         <span>详情图</span>
                         <div class="detail-img">
-                            <img v-for="item in detail.detail_images" :key="item.path" :src="item.url" alt="">
+                            <el-upload
+                                action="https://jsonplaceholder.typicode.com/posts/"
+                                list-type="picture-card"
+                                :on-preview="PictureCard"
+                                :on-remove="Onremove">
+                                <i class="el-icon-plus"></i>
+                            </el-upload>
+                            <el-dialog :visible.sync="disible">
+                                <img width="100%" :src="dmageUrl" alt="">
+                            </el-dialog>
                         </div>
                     </div>
                     <div class="list">
                         <span>商品描述</span>
-                        <span v-if="detail.description==''">暂无</span>
-                        <span v-else>{{detail.description}}</span>
+                        <el-input class="list-select" type="textarea" v-model="detail.description"></el-input>
                     </div>
                 </div>
                 <div class="basic">
                     <h3>其他信息</h3>
                     <div class="list">
                         <span>上架时间</span>
-                        <span>{{detail.publish_mode_name}} {{detail.publish_time}}</span>
+                        <div>
+                            <el-radio 
+                            v-for="item in basicList.publish_mode"
+                            :key="item.id"
+                            v-model="upradio" 
+                            :label="item.id">{{item.name}}</el-radio>
+                        </div>
                     </div>
                     <div class="list">
-                        <span>上架时间</span>
-                        <span v-if="detail.unpublish_time==''">暂无</span>
-                        <span v-else>{{detail.unpublish_time}}</span>
+                        <span>下架时间</span>
+                        <el-date-picker
+                            v-model="value1"
+                            type="date"
+                            placeholder="选择日期">
+                        </el-date-picker>
                     </div>
                     <div class="list">
                         <span>售后服务</span>
-                        <span v-if="detail.return_status_name==''">暂无</span>
-                        <span v-else>{{detail.return_status_name}}</span>
+                        <div>
+                            <el-radio 
+                            v-for="item in basicList.return_status"
+                            :key="item.id"
+                            v-model="lastradio" 
+                            :label="item.id">{{item.name}}</el-radio>
+                        </div>
                     </div>
-                </div>
-                <div class="basic">
-                    <h3>操作历史</h3>
                 </div>
             </div>
         </div>
@@ -163,6 +228,20 @@
                 shopList:{},
                 basicList:{},
                 index:0,
+                checked: true,
+                imageUrl: '',
+                visible: false,
+                input:'',
+                isShow:'',
+                deliveryCheck:false,
+                radio: 0,
+                pre:false,
+                value:'',
+                iptVal:'',
+                desc:'',
+                upradio:1,
+                value1:'',
+                lastradio:1,
                 title:[{
                     tit:'颜色',
                     key:'color'
@@ -187,125 +266,15 @@
                 }],
                 dialogImageUrl: '',
                 dialogVisible: false,
-            //     options: [{
-            // value: 'zhinan',
-            // label: '指南',
-            // children: [{
-            //     value: 'shejiyuanze',
-            //     label: '设计原则',
-            //     children: [{
-            //     value: 'yizhi',
-            //     label: '一致'
-            //     }, {
-            //     value: 'fankui',
-            //     label: '反馈'
-            //     }, {
-            //     value: 'xiaolv',
-            //     label: '效率'
-            //     }, {
-            //     value: 'kekong',
-            //     label: '可控'
-            //     }]
-            // }, {
-            //     value: 'daohang',
-            //     label: '导航',
-            //     children: [{
-            //     value: 'cexiangdaohang',
-            //     label: '侧向导航'
-            //     }, {
-            //     value: 'dingbudaohang',
-            //     label: '顶部导航'
-            //     }]
-            // }]
-            // }, {
-            //     value: 'form',
-            //     label: 'Form',
-            //     children: [{
-            //     value: 'radio',
-            //     label: 'Radio 单选框'
-            //     }, {
-            //     value: 'checkbox',
-            //     label: 'Checkbox 多选框'
-            //     }, {
-            //     value: 'input',
-            //     label: 'Input 输入框'
-            //     }, {
-            //     value: 'input-number',
-            //     label: 'InputNumber 计数器'
-            //     }, {
-            //     value: 'select',
-            //     label: 'Select 选择器'
-            //     }, {
-            //     value: 'cascader',
-            //     label: 'Cascader 级联选择器'
-            //     }, {
-            //     value: 'switch',
-            //     label: 'Switch 开关'
-            //     }, {
-            //     value: 'slider',
-            //     label: 'Slider 滑块'
-            //     }, {
-            //     value: 'time-picker',
-            //     label: 'TimePicker 时间选择器'
-            //     }, {
-            //     value: 'date-picker',
-            //     label: 'DatePicker 日期选择器'
-            //     }, {
-            //     value: 'datetime-picker',
-            //     label: 'DateTimePicker 日期时间选择器'
-            //     }, {
-            //     value: 'upload',
-            //     label: 'Upload 上传'
-            //     }, {
-            //     value: 'rate',
-            //     label: 'Rate 评分'
-            //     }, {
-            //     value: 'form',
-            //     label: 'Form 表单'
-            //     }]
-            // },{
-            //     value: 'navigation',
-            //     label: 'Navigation',
-            //         children: [{
-            //             value: 'menu',
-            //             label: 'NavMenu 导航菜单'
-            //             }, {
-            //             value: 'tabs',
-            //             label: 'Tabs 标签页'
-            //             }, {
-            //             value: 'breadcrumb',
-            //             label: 'Breadcrumb 面包屑'
-            //             }, {
-            //             value: 'dropdown',
-            //             label: 'Dropdown 下拉菜单'
-            //             }, {
-            //             value: 'steps',
-            //             label: 'Steps 步骤条'
-            //         }]
-            //     }, {
-            //         value: 'others',
-            //         label: 'Others',
-            //         children: [{
-            //             value: 'dialog',
-            //             label: 'Dialog 对话框'
-            //             }, {
-            //             value: 'tooltip',
-            //             label: 'Tooltip 文字提示'
-            //             }, {
-            //             value: 'popover',
-            //             label: 'Popover 弹出框'
-            //             }, {
-            //             value: 'card',
-            //             label: 'Card 卡片'
-            //             }, {
-            //             value: 'carousel',
-            //             label: 'Carousel 走马灯'
-            //             }, {
-            //             value: 'collapse',
-            //             label: 'Collapse 折叠面板'
-            //             }]
-            //     }]
-            options:[]
+                dmageUrl: '',
+                disible: false,
+                options:[],
+                selectedOptions: [7],
+                defaultParams: {
+                    label: 'title',
+                    value: 'value',
+                    children: 'children'
+                },
             }
         },
         created(){
@@ -336,7 +305,7 @@
                         item.color=brr[i].color
                         item.size=brr[i].size
                     })
-                    console.log(this.tableData)
+                    console.log(this.tableData,'----------table')
                 })
             },
             async getShopMinxin(){
@@ -347,26 +316,23 @@
             async getBasicMinxin(){
                 const arr = await basicMinxin()
                 this.basicList = arr.data
-                arr.data.categories.forEach((item,i)=>{
-                    const obj={}
-                    obj.value=item.id
-                    obj.label=item.title
-                    const child=[]
-                    item.children,length && item.children.forEach((key,i)=>{
-                        const obj1={}
-                        obj1.value=key.id
-                        obj1.label=key.title
-                        console.log(obj1,3333)
-                        // child.push(obj1)
-                    })
-                    // console.log(obj1)
-                    // obj.children=child
-                    this.options.push(obj)
-                }) 
-                console.log(this.options,222222222)
+                this.options=arr.data.categories
             },
             tabActive(i){
                 this.index=i
+            },
+            addSize(i){
+                this.isShow=!this.isShow
+            },
+            addImg(){
+                this.checked=!this.checked
+            },
+            deliveryChange(id){
+                this.deliveryCheck=!this.deliveryCheck
+                
+                if(id==1){
+                    this.pre=this.deliveryCheck
+                }
             },
             handleRemove(file, fileList) {
                 console.log(file, fileList);
@@ -374,7 +340,21 @@
             handlePictureCardPreview(file) {
                 this.dialogImageUrl = file.url;
                 this.dialogVisible = true;
-            }
+            },
+            Remove(file, fileList) {
+                console.log(file, fileList);
+            },
+            PictureCardPreview(file) {
+                this.dialogImageUrl = file.url;
+                this.dialogVisible = true;
+            },
+            Onremove(file, fileList) {
+                console.log(file, fileList);
+            },
+            PictureCard(file) {
+                this.dialogImageUrl = file.url;
+                this.dialogVisible = true;
+            },
         },
     }
 </script>
@@ -483,6 +463,35 @@
     .image /deep/ .el-upload-list--picture-card .el-upload-list__item{
         height: 182px;
     }
+    .list-item /deep/ .el-upload--picture-card{
+        width: 120px;
+        height: 128px;
+        margin-top: 8px;
+        line-height: 128px;
+    }
+    .list-item /deep/ .el-upload-list--picture-card .el-upload-list__item{
+        height: 128px;
+    }
+    .pre-time{
+        padding: 24px;
+        display: flex;
+        background-color: #fafafa;
+        dd{
+           margin-left: 20px;
+        }
+    }
+    .pre-time /deep/ .el-radio{
+        display: block;
+        margin-top: 10px;
+    }
+    .list /deep/ .el-radio{
+        display: block;
+        margin-top: 10px;
+        margin-left: 20px;
+    }
+    .list /deep/ .el-date-editor{
+        margin-left: 20px;
+    }
     .list{
         width: 100%;
         margin-top: 24px;
@@ -494,9 +503,12 @@
             text-align: right;
             display: inline-block;
         }
-        span:nth-of-type(2){
-            margin-left: 20px;
-        }
+        // span:nth-of-type(2){
+        //     cursor: pointer;
+        //     color: #1890ff;
+        //     margin-left: 10px;
+        //     margin-top: 5px;
+        // }
         .typeRight{
             border: 1px solid #d9d9d9;
             border-radius: 4px;
@@ -545,6 +557,10 @@
         .setWidth{
             width: 41.66666667%;
             margin-left: 20px;
+        }
+        .list-select{
+            width: 25%;
+            margin-left: 24px;
         }
     }
 </style>
