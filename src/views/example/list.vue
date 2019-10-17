@@ -1,112 +1,124 @@
 <template>
-  <div class="app-container">
-    <el-table v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
-      <el-table-column align="center" label="ID" width="80">
-        <template slot-scope="scope">
-          <span>{{ scope.row.id }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="180px" align="center" label="Date">
-        <template slot-scope="scope">
-          <span>{{ scope.row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="120px" align="center" label="Author">
-        <template slot-scope="scope">
-          <span>{{ scope.row.author }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="100px" label="Importance">
-        <template slot-scope="scope">
-          <svg-icon v-for="n in +scope.row.importance" :key="n" icon-class="star" class="meta-item__icon" />
-        </template>
-      </el-table-column>
-
-      <el-table-column class-name="status-col" label="Status" width="110">
-        <template slot-scope="{row}">
-          <el-tag :type="row.status | statusFilter">
-            {{ row.status }}
-          </el-tag>
-        </template>
-      </el-table-column>
-
-      <el-table-column min-width="300px" label="Title">
-        <template slot-scope="{row}">
-          <router-link :to="'/example/edit/'+row.id" class="link-type">
-            <span>{{ row.title }}</span>
-          </router-link>
-        </template>
-      </el-table-column>
-
-      <el-table-column align="center" label="Actions" width="120">
-        <template slot-scope="scope">
-          <router-link :to="'/example/edit/'+scope.row.id">
-            <el-button type="primary" size="small" icon="el-icon-edit">
-              Edit
-            </el-button>
-          </router-link>
-        </template>
-      </el-table-column>
-    </el-table>
-
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+  <div class="management">
+    <div class="managementTab">
+      <div class="managementhead">导购管理</div>
+      <el-tabs v-model="activeName" class="managetabs" @tab-click="handleClick">
+        <el-tab-pane label="导购管理" name="guide">
+          <div class="mangeFrom">
+            <el-form ref="formInline" :inline="true" :model="formInline" class="demo-form-inline">
+              <el-form-item label="店铺名">
+                <el-input v-model="formInline.design" placeholder="请输入店铺名" />
+              </el-form-item>
+              <el-form-item label="楼层">
+                <el-select v-model="formInline.floor" placeholder="请选择">
+                  <el-option label="f1" value="f1" />
+                  <el-option label="f2" value="f2" />
+                </el-select>
+              </el-form-item>
+              <el-form-item label="分类">
+                <el-input v-model="formInline.classification" placeholder="请选择" />
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="onSubmit">查询</el-button>
+              </el-form-item>
+              <el-form-item>
+                <el-button @click="onReset('formInline')">重置</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
+          <tabs :table-data="tableData" :list="title[activeName]" />
+        </el-tab-pane>
+        <el-tab-pane label="邀请中" name="invitation">
+          <tabs :table-data="tableData" :list="title[activeName]" />
+        </el-tab-pane>
+        <el-tab-pane label="角色描述" name="role">
+          <div class="mangeTable">
+            <el-table :data="tableData" style="width: 100%">
+              <el-table-column prop="name" label="店铺名称" width="120" />
+              <el-table-column prop="floor_name" label="楼层" width="120" />
+              <el-table-column prop="address" label="位置" width="120" />
+              <el-table-column prop="category_data" label="所属分类" width="120" />
+              <el-table-column prop="shop_manager" label="店长" />
+              <el-table-column prop="building" label="楼管" width="180" />
+              <el-table-column prop="status_str" label="状态" width="120" />
+              <el-table-column prop="address" label="操作" width="120">
+                <el-button type="text" size="small" @cell-click="goDetail">查看</el-button>
+              </el-table-column>
+            </el-table>
+          </div>
+        </el-tab-pane>
+      </el-tabs>
+    </div>
   </div>
 </template>
-
 <script>
-import { fetchList } from '@/api/article'
-import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
-
+import { mapState, mapActions } from 'vuex'
+import tabs from './components/exampleTabs'
+import title from './data/data'
 export default {
-  name: 'ArticleList',
-  components: { Pagination },
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'info',
-        deleted: 'danger'
-      }
-      return statusMap[status]
-    }
-  },
+  components: { tabs },
+  props: {},
   data() {
     return {
-      list: null,
-      total: 0,
-      listLoading: true,
-      listQuery: {
-        page: 1,
-        limit: 20
-      }
+      activeName: 'guide',
+      formInline: { design: '', floor: '', classification: '' },
+      fromdata: { type: 2, page: 1, status: '[0,1]' },
+      title,
+      tableData: []
     }
   },
-  created() {
-    this.getList()
+  computed: {},
+  async created() {
+    this.tableData = await this.getuserlist(this.fromdata)
   },
+  mounted() {},
   methods: {
-    getList() {
-      this.listLoading = true
-      fetchList(this.listQuery).then(response => {
-        this.list = response.data.items
-        this.total = response.data.total
-        this.listLoading = false
-      })
-    }
+    ...mapActions('shopArcade', ['getuserlist']),
+    handleClick(tab, event) {
+      this.activeName = tab.name
+      if (tab.name === 'invitation') {
+
+      }
+    },
+    onSubmit() {},
+    onReset(rulesFrom) {
+      this.$refs[rulesFrom].resetFields()
+    },
+    goDetail(row, column, cell, event) {}
+
   }
 }
 </script>
-
-<style scoped>
-.edit-input {
-  padding-right: 100px;
-}
-.cancel-btn {
-  position: absolute;
-  right: 15px;
-  top: 10px;
+<style scoped lang="scss">
+.management {
+  width: 100%;
+  padding: 30px;
+  background: #fcfcfc;
+  .mangeFrom {
+    margin-top: 24px;
+    padding: 24px;
+    background: #fff;
+  }
+  .managementTab {
+    width: 100%;
+    background: #fff;
+    .managetabs {
+      margin-left: 12px;
+      .el-tabs__header {
+        margin: 0;
+        background: red;
+      }
+    }
+    .managementhead {
+      padding: 24px;
+      overflow: hidden;
+    }
+  }
+  .mangeTable {
+    margin-top: 24px;
+    padding: 24px;
+    background: #fff;
+    text-align: center;
+  }
 }
 </style>

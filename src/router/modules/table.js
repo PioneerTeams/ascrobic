@@ -13,10 +13,24 @@ const tableRouter = {
   },
   children: [
     {
-      path: 'dynamic-table',
-      component: () => import('@/views/table/dynamic-table/index'),
-      name: 'DynamicTable',
+      path: 'index',
+      component: () => import('@/views/table/index'),
+      name: 'index',
       meta: { title: '商品管理' }
+    },
+    {
+      path: 'look',
+      component: () => import('@/views/table/look'),
+      name: 'look',
+      hidden:true,
+      meta: { title: '商品列表' }
+    },
+    {
+      path: 'compile',
+      component: () => import('@/views/table/compile'),
+      name: 'compile',
+      hidden:true,
+      meta: { title: '商品列表' }
     },
     {
       path: 'drag-table',
