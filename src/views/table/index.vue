@@ -1,18 +1,17 @@
 <template>
   <div class="app-container">
-      <div class="manger">
-          <h3>商品管理</h3>
-          <div class="options-active">
-              <div class="batch-btn">
-                <i class="el-icon-download"></i>批量上传
-              </div>
-              <div class="batch-btn">
-                <i class="el-icon-download"></i>批量导出
-              </div>
-              <div class="batch-btn">
-                <i class="el-icon-document-delete"></i>查看已生成报表
-              </div>
-          </div>
+    <div class="manger">
+      <h3>商品管理</h3>
+      <div class="options-active">
+        <div class="batch-btn">
+          <i class="el-icon-download" />批量上传
+        </div>
+        <div class="batch-btn">
+          <i class="el-icon-download" />批量导出
+        </div>
+        <div class="batch-btn">
+          <i class="el-icon-document-delete" />查看已生成报表
+        </div>
       </div>
       <div class="tab-form">
           <div class="nav-selected">
@@ -32,23 +31,24 @@ import { mapState, mapMutations } from 'vuex'
 
 export default {
   name: 'DynamicTable',
+  components: { CommodityForm, CommodityTable },
   data() {
     return {
-      navSelect:[{
-        status:4,
-        label:'销售中'
-      },{
-        status:5,
-        label:'仓库中'
-      },{
-        status:2,
-        label:'草稿箱'
-      },{
-        status:1,
-        label:'待审核'
-      },{
-        status:3,
-        label:'未通过审核'
+      navSelect: [{
+        status: 4,
+        label: '销售中'
+      }, {
+        status: 5,
+        label: '仓库中'
+      }, {
+        status: 2,
+        label: '草稿箱'
+      }, {
+        status: 1,
+        label: '待审核'
+      }, {
+        status: 3,
+        label: '未通过审核'
       }],
       activeName: 4,
       tableData: [],
@@ -93,7 +93,7 @@ export default {
         this.tableData.map((item,i)=>item.stock=`${num[i]}个SKU${stock[i]}个库存`)
         this.count=list.pagination.count
     }
-  },
+  }
 }
 </script>
 
@@ -109,7 +109,7 @@ export default {
     background-color: #fff;
     padding: 24px;
     h3{
-        padding-bottom: 24px;      
+        padding-bottom: 24px;
     }
     .options-active{
         font-size: 14px;

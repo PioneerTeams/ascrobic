@@ -133,7 +133,7 @@ export default {
   data() {
     return {
       activeName: 'first',
-      formSelect:{},
+      formSelect: {},
       formInline: {
         styleNum: '',
         shopName: '',
@@ -258,9 +258,9 @@ export default {
     this.getlist()
   },
   methods: {
-    getlist(){
-      manageList().then(res=>{
-        this.formSelect=res.data
+    getlist() {
+      manageList().then(res => {
+        this.formSelect = res.data
         console.log(this.formSelect)
       })
     },
