@@ -1,6 +1,7 @@
 import request from '@/utils/request'
 import qs from 'qs'
 
+// 商品管理
 // 表单初始化
 export function manageList(status) {
   const data = {
@@ -109,5 +110,23 @@ export function basicMinxin() {
     method: 'post',
     baseURL: '/api',
     headers: { 'content-Type': 'application/x-www-form-urlencoded' }
+  })
+}
+
+// 库存管理
+// 表格初始化数据
+export function stockList(page) {
+  const data={
+    page,
+    pageSize: 10,
+    status: 1,
+    vm_store_id: 43529,
+  }
+  return request({
+    url: '/prod/stock-list',
+    method: 'post',
+    baseURL: '/api',
+    headers: { 'content-Type': 'application/x-www-form-urlencoded' },
+    data: qs.stringify(data)
   })
 }

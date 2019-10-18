@@ -7,7 +7,13 @@ import { getToken } from '@/utils/auth'
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
-  headers: { 'Authorization': 'Bearer DgZcRu7p9X2bkMrTseNpc3Wa2Df00ovN', 'x-org-id': 61500, 'x-org-type': 5, 'x-user-id': 963245015 },
+  headers: {
+    'Authorization': 'Bearer DgZcRu7p9X2bkMrTseNpc3Wa2Df00ovN',
+    'x-org-id': 61500,
+    'x-org-type': 5,
+    'x-user-id': 963245015
+  },
+
   timeout: 5000 // request timeout
 })
 

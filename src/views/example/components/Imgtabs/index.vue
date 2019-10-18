@@ -1,6 +1,11 @@
 <template>
   <div class="mangeTable">
-    <el-table :data="tableData" style="width: 100%" @cell-click="handleClick">
+    <el-table :data="tableData" style="width: 100%">
+      <el-table-column prop="img" label="缩略图">
+        <template slot-scope="scope">
+          <img :src="scope.row.img" class="img" alt>
+        </template>
+      </el-table-column>
       <el-table-column
         v-for="(ele,index) in list"
         :key="index"
@@ -27,10 +32,7 @@ export default {
     return {}
   },
   computed: {},
-  created() {
-    console.log(this.tableData)
-    console.log(this.list)
-  },
+  created() {},
   mounted() {},
   methods: {
     handleClick(tab, event) {
@@ -49,5 +51,10 @@ export default {
   background: #fff;
   text-align: center;
   border-radius: 10px;
+}
+.img{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
 }
 </style>
