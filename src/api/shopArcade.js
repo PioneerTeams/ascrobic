@@ -30,7 +30,6 @@ export async function getStorePowerList() {
   const result = await request({ url: '/store/get-store-power-list', method: 'post', baseURL: '/api' })
   return result.data
 }
-
 // 导购管理
 export async function getUserList(data) {
   const result = await request({ url: '/user/list', method: 'post', baseURL: '/api', data })

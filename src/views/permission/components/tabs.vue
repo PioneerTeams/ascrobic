@@ -12,7 +12,10 @@
 export default {
   components: {},
   props: {
-    tableData: Array,
+    tableData: {
+      defaultValue: [],
+      type: Array
+    },
     list: {
       defaultValue: [],
       type: Array
@@ -26,7 +29,6 @@ export default {
   mounted() {},
   methods: {
     handleClick(tab, event) {
-      console.log(tab)
       if (event.label === '操作') {
         const id = tab.id
         this.$router.push({ name: 'pageDetails', query: { id }})
