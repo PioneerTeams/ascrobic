@@ -18,7 +18,7 @@
           <div class="nav-selected">
             <div v-for="item in navSelect" :class="{'navActive':activeName==item.status}" :key="item.status" @click="handleClick(item.status)">{{item.label}}</div>
           </div>
-          <CommodityForm :activeName="activeName"/>
+          <CommodityForm :activeName="activeName" :show="show"/>
       </div>
       <CommodityTable :show="show" :activeName="activeName" :tableData="tableData" :count="count"/>
   </div>
@@ -28,7 +28,7 @@
 import { tableList } from '@/api/commodity'
 import CommodityForm from '@/components/Commodity/form'
 import CommodityTable from '@/components/Commodity/table'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
   name: 'DynamicTable',
@@ -62,10 +62,14 @@ export default {
   components: { CommodityForm, CommodityTable },
   mounted() {
     this.getTable()
+    this.setActive(this.activeName)
   },
   methods: {
+    ...mapMutations('commodity',['setActive','setPage']),
     handleClick(tab) {
       this.activeName=tab
+      this.getTable()
+      this.setActive(tab)
     },
     // 初始化表格数据
     getTable(){
@@ -74,7 +78,7 @@ export default {
             this.tableData=res.data.list
             const stock=res.data.list.map(item=>item.sku_stock_num)
             const num=res.data.list.map(item=>item.sku_nums)
-            this.tableData.map((item,i)=>item.stock=`${num[i]}个SKU${stock[i]}个库存`)
+            this.tableData.map((item,i)=>item.store_stock=`${num[i]}个SKU${stock[i]}个库存`)
         })
     },
   },
@@ -83,10 +87,11 @@ export default {
         this.getTable(this.num,size)
     },
     list(list){
-        this.tableData=list
-        const stock=list.map(item=>item.sku_stock_num)
-        const num=list.map(item=>item.sku_nums)
+        this.tableData=list.list
+        const stock=list.list.map(item=>item.sku_stock_num)
+        const num=list.list.map(item=>item.sku_nums)
         this.tableData.map((item,i)=>item.stock=`${num[i]}个SKU${stock[i]}个库存`)
+        this.count=list.pagination.count
     }
   },
 }

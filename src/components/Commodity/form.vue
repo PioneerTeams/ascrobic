@@ -4,12 +4,15 @@
           <el-form-item label="款号:">
             <el-input v-model="formInline.prod_code" placeholder="请输入"></el-input>
           </el-form-item>
-          <el-form-item label="商品名称:">
+          <el-form-item label="SKU编码:" v-if="show==false">
+            <el-input v-model="formInline.sku_code" placeholder="请输入"></el-input>
+          </el-form-item>
+          <el-form-item label="商品名称:" v-else>
             <el-input v-model="formInline.prod_name" placeholder="请输入"></el-input>
           </el-form-item>
           <el-form-item label="分类:">
             <el-select v-model="formInline.category_id" filterable placeholder="请选择">
-              <el-option-group v-for="group in formSelect.category" :key="group.id" :label="group.title">
+              <el-option-group v-for="group in category" :key="group.id" :label="group.title">
                 <el-option  v-for="item in group.children" :key="item.id" :label="item.title" :value="item.value">
                 </el-option>
               </el-option-group>
@@ -17,7 +20,7 @@
           </el-form-item>
           <el-form-item label="品牌:">
             <el-select v-model="formInline.brand_id" placeholder="请选择">
-              <el-option v-for="item in formSelect.brand" :key="item.id" :label="item.name" :value="item.id"></el-option>
+              <el-option v-for="item in brand" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="商品来源:">
@@ -25,25 +28,25 @@
               <el-option v-for="item in formSelect.source" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="商品类型:">
+          <el-form-item label="商品类型:" v-if="show">
             <el-select v-model="formInline.prod_type" placeholder="请选择">
               <el-option v-for="item in formSelect.product_type" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="配送方式:">
+          <el-form-item label="配送方式:" v-if="show">
             <el-select v-model="formInline.type" placeholder="请选择">
               <el-option v-for="item in formSelect.delivery" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="店铺:">
             <el-select v-model="formInline.vm_store_id" placeholder="请选择">
-              <el-option-group v-for="group in formSelect.store" :key="group.id" :label="group.title">
+              <el-option-group v-for="group in store" :key="group.id" :label="group.title">
                 <el-option  v-for="item in group.children" :key="item.id" :label="item.title" :value="item.value">
                 </el-option>
               </el-option-group>
             </el-select>
           </el-form-item>
-          <el-form-item :label="activeName==4?'上架时间:':(activeName==1?'提交时间:':(activeName==3?'审核时间:':''))" v-show="activeName==3||activeName==1||activeName==4">
+          <el-form-item v-if="show" :label="activeName==4?'上架时间:':(activeName==1?'提交时间:':(activeName==3?'审核时间:':''))" v-show="activeName==3||activeName==1||activeName==4">
             <el-date-picker
               v-model="formInline.date"
               type="daterange"
@@ -72,11 +75,12 @@
 
 <script>
     import { mapState, mapMutations, mapActions } from 'vuex'
-    import { manageList, tableList } from '@/api/commodity'
+    import { manageList, tableList, basicMinxin } from '@/api/commodity'
 
     export default {
         props:{
-            activeName:Number
+            activeName:Number,
+            show:Boolean,
         },
         data() {
             return {
@@ -96,27 +100,48 @@
                     retailer_status:'',
                     up_time:[],
                     submit_time:[],
-                    audit_time:[]
+                    audit_time:[],
+                    sku_code:''
                 },
+                category:[],
+                brand:[],
+                store:[],
                 num:4,
             }
         },
-        computed: {
-            ...mapState('commodity',['list'])
-        },
+        // computed: {
+        //     ...mapState('commodity',['list'])
+        // },
         created(){
-            this.getFormTable(this.formInline) 
+            if(this.show){
+                this.getFormTable(this.formInline)
+            }else{
+                this.getStoreList(this.formInline)
+            }
         },
         mounted() {
             this.getlist(this.activeName)
         },
         methods: {
             ...mapMutations('commodity',['setForm']),
-            ...mapActions('commodity',['getFormTable']),
+            ...mapActions('commodity',['getFormTable','getStoreList']),
             getlist(num){
-                manageList(num).then(res=>{
-                    this.formSelect=res.data
-                })
+                if(this.show){
+                    manageList(num).then(res=>{
+                        this.formSelect=res.data
+                        this.category=res.data.category
+                        this.brand=res.data.brand
+                        this.store=res.data.store
+                    })
+                }else{
+                    basicMinxin().then(res=>{
+                      console.log(res.data,'----resssss')
+                        this.formSelect=res.data
+                        this.category=res.data.categories
+                        this.brand=res.data.brands
+                        this.store=res.data.vm_store_list
+                    })
+                }
             },
             onSubmit() {
                 const arr=[],brr=[]
@@ -136,7 +161,12 @@
                     this.formInline.audit_time=brr
                 }
                 this.setForm(this.formInline)
-                this.getFormTable(this.formInline)
+
+                if(this.show){
+                    this.getFormTable(this.formInline)
+                }else{
+                    this.getStoreList(this.formInline)
+                }
             },
             resetForm(formName) {
                 let arr = Object.keys(this.formInline)
