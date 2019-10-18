@@ -305,13 +305,11 @@
                         item.color=brr[i].color
                         item.size=brr[i].size
                     })
-                    console.log(this.tableData,'----------table')
                 })
             },
             async getShopMinxin(){
                 const arr = await shopMinxin(this.$route.query.standard_category_id)
                 this.shopList = arr.data
-                console.log(arr.data,11111111)
             },
             async getBasicMinxin(){
                 const arr = await basicMinxin()

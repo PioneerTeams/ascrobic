@@ -115,12 +115,34 @@ export function basicMinxin() {
 
 // 库存管理
 // 表格初始化数据
-export function stockList(page) {
+export function stockList(status,page) {
   const data={
     page,
     pageSize: 10,
-    status: 1,
-    vm_store_id: 43529,
+    status,
+    vm_store_id: 3446,
+  }
+  return request({
+    url: '/prod/stock-list',
+    method: 'post',
+    baseURL: '/api',
+    headers: { 'content-Type': 'application/x-www-form-urlencoded' },
+    data: qs.stringify(data)
+  })
+}
+
+// 库存页面表单查询数据
+export function storeList(status,page,formInline) {
+  const data={
+    page,
+    pageSize: 10,
+    status,
+    vm_store_id: 3446,
+    code: formInline.prod_code,
+    sku_code: formInline.sku_code,
+    category_id: formInline.category_id,
+    brand_id: formInline.brand_id,
+    prod_src: formInline.vm_store_id
   }
   return request({
     url: '/prod/stock-list',

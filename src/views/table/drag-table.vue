@@ -1,16 +1,10 @@
 <template>
   <div class="app-container">
       <div class="manger">
-          <h3>商品管理</h3>
+          <h3>库存管理</h3>
           <div class="options-active">
               <div class="batch-btn">
                 <i class="el-icon-download"></i>批量上传
-              </div>
-              <div class="batch-btn">
-                <i class="el-icon-download"></i>批量导出
-              </div>
-              <div class="batch-btn">
-                <i class="el-icon-document-delete"></i>查看已生成报表
               </div>
           </div>
       </div>
@@ -18,7 +12,7 @@
           <div class="nav-selected">
             <div v-for="item in navSelect" :class="{'navActive':activeName==item.status}" :key="item.status" @click="handleClick(item.status)">{{item.label}}</div>
           </div>
-          <CommodityForm :activeName="activeName"/>
+          <CommodityForm :activeName="activeName" :show="show"/>
       </div>
       <CommodityTable :show="show" :activeName="activeName" :tableData="tableData" :count="count"/>
   </div>
@@ -28,67 +22,64 @@
 import { stockList } from '@/api/commodity'
 import CommodityForm from '@/components/Commodity/form'
 import CommodityTable from '@/components/Commodity/table'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
   name: 'DynamicTable',
   data() {
     return {
       navSelect:[{
-        status:4,
+        status:1,
         label:'销售中'
       },{
-        status:5,
-        label:'仓库中'
-      },{
-        status:2,
-        label:'草稿箱'
-      },{
-        status:1,
-        label:'待审核'
-      },{
-        status:3,
-        label:'未通过审核'
+        status:0,
+        label:'已售罄'
       }],
-      activeName: 4,
+      obj:{
+        pageSize: 10,
+        vm_store_id: 3446
+      },
+      activeName: 1,
       tableData: [],
       count:0,
       show:false,
     }
   },
   computed: {
-    ...mapState('commodity',['page','list'])
+    ...mapState('commodity',['page','storeList','formInline'])
   },
   components: { CommodityForm, CommodityTable },
   mounted() {
     this.getTable()
+    this.setStoreNum(this.activeName)
+    console.log(this.storeList,'list------------')
+    console.log(this.formInline,'formInline==============')
   },
   methods: {
+    ...mapMutations('commodity',['setStoreNum','setPage']),
     handleClick(tab) {
       this.activeName=tab
+      this.getTable()
+      this.setStoreNum(tab)
     },
     // 初始化表格数据
     getTable(){
-        stockList(this.page).then(res=>{
+        stockList(this.activeName,this.page).then(res=>{
             this.count=res.data.pagination.count
             this.tableData=res.data.list
-
-            const stock=res.data.list.map(item=>item.sku_stock_num)
-            const num=res.data.list.map(item=>item.sku_nums)
-            this.tableData.map((item,i)=>item.stock=`${num[i]}个SKU${stock[i]}个库存`)
-            console.log(this.tableData,11111111111)
         })
     },
+    getNext(){
+
+    }
   },
   watch: {
     page(size){
         this.getTable(this.num,size)
     },
-    list(list){
-        this.tableData=list
-        const stock=list.map(item=>item.sku_stock_num)
-        const num=list.map(item=>item.sku_nums)
-        this.tableData.map((item,i)=>item.stock=`${num[i]}个SKU${stock[i]}个库存`)
+    storeList(storeList){
+        this.tableData=storeList.list
+        this.count=storeList.pagination.count
     }
   },
 }

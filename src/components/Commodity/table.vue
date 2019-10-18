@@ -45,11 +45,11 @@
             <el-table-column prop="name" label="商品名称" v-if="show"/>
             <el-table-column prop="product_code" label="商品款号" v-else/>
             <el-table-column prop="price" label="品牌价" v-if="show"/>
-            <el-table-column prop="sku_code" label="SKU编码" v-if="show"/>
-            <el-table-column prop="stock" label="库存" v-if="show"/>
+            <el-table-column prop="sku_code" label="SKU编码" v-else/>
+            <el-table-column prop="store_stock" label="库存" v-if="show"/>
             <el-table-column prop="brand_name" label="品牌" v-else/>
             <el-table-column prop="category_name" label="分类" v-if="show"/>
-            <el-table-column prop="category_name" label="商品规格"/>
+            <el-table-column prop="shopping_sku" label="商品规格" v-else/>
             <el-table-column prop="brand_name" label="品牌" v-if="show"/>
             <el-table-column prop="stock" label="电商库存" v-else/>
             <el-table-column prop="vm_store_name" label="门店" v-if="show==false"/>
@@ -136,8 +136,8 @@
         watch: {
             activeName(num){
                 this.num=num
-                this.setActive(num)
-            },
+                // this.setActive(num)
+            }
         },
     }
 </script>

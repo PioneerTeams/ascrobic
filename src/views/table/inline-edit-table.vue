@@ -129,6 +129,8 @@ export default {
   name: 'InlineEditTable',
   data() {
     return {
+      drawer: false,
+      direction: 'rtl',
       flag: true,
       tabList:[],
       form: {
