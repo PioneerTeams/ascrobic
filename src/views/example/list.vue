@@ -6,7 +6,10 @@
         <el-tab-pane label="导购管理" name="guide">
           <guide />
         </el-tab-pane>
-        <el-tab-pane label="邀请中" name="invitation">
+        <el-tab-pane name="invitation">
+          <template slot="label">
+            <el-badge :value="96" :max="99" class="item">邀请中</el-badge>
+          </template>
           <tabs :table-data="invitation" :list="arr.invitation" />
         </el-tab-pane>
         <el-tab-pane label="角色描述" name="role">
@@ -17,44 +20,44 @@
   </div>
 </template>
 <script>
-import guide from './components/guideShop'
-import tabs from './components/exampleTabs'
-import { getUserList, getDescList } from '@/api/shopArcade'
-import arr from './data/data.js'
+import guide from "./components/guideShop";
+import tabs from "./components/exampleTabs";
+import { getUserList, getDescList } from "@/api/shopArcade";
+import arr from "./data/data.js";
 export default {
   components: { tabs, guide },
   props: {},
   data() {
     return {
       arr,
-      current: 'invitation',
-      activeName: 'guide',
+      current: "invitation",
+      activeName: "guide",
       invitation: [],
       role: [],
-      invitationdata: { type: 2, status: 3, page: 1, sort_time: '' },
+      invitationdata: { type: 2, status: 3, page: 1, sort_time: "" },
       roledata: { mall_id: 61500, type: 2, page: 1 }
-    }
+    };
   },
   created() {
-    this.getUserLists()
-    this.getDescLists()
+    this.getUserLists();
+    this.getDescLists();
   },
   methods: {
     async getUserLists() {
-      const result = await getUserList(this.invitationdata)
-      console.log(result, '邀请中')
-      this.invitation = result.list
+      const result = await getUserList(this.invitationdata);
+      console.log(result, "邀请中");
+      this.invitation = result.list;
     },
     async getDescLists() {
-      const result = await getDescList(this.roledata)
-      console.log(result, '角色描述')
-      this.role = result.list
+      const result = await getDescList(this.roledata);
+      console.log(result, "角色描述");
+      this.role = result.list;
     },
     currentClick() {
-      console.log(this.activeName)
+      console.log(this.activeName);
     }
   }
-}
+};
 </script>
 <style scoped lang="scss">
 .management {
@@ -96,5 +99,12 @@ export default {
   background: #fff;
   text-align: center;
   border-radius: 10px;
+}
+.el-badge__content.is-fixed {
+    top: 7px;
+    right: 22px;
+}
+.item{
+  height: 100px;
 }
 </style>
