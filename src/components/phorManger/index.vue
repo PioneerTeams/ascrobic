@@ -12,7 +12,10 @@
 export default {
   components: {},
   props: {
-    tableData: Array,
+    tableData: {
+      defaultValue: [],
+      type: Array
+    },
     list: {
       defaultValue: [],
       type: Array
