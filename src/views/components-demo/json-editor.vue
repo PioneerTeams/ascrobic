@@ -318,7 +318,24 @@ export default {
       // window.localStorage.setItem("sub_order_number",row.sub_number)
       this.$router.push(`markdown/detail/${row.sub_number}`)
     },
-    reset() {},
+    reset() {
+      this.form = {
+        cancellationNumber: '',
+        name: '',
+        tel: '',
+        orderNumber: '',
+        shopOrderNumber: '',
+        floor: '',
+        store: '',
+        brand: '',
+        goodsNumber: '',
+        goodsName: '',
+        applicationTime: '',
+        cancellationTime: ''
+      }
+
+      this.getSubOrder(this.index, 1)
+    },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)
     },
