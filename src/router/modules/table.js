@@ -22,14 +22,14 @@ const tableRouter = {
       path: 'look',
       component: () => import('@/views/table/look'),
       name: 'look',
-      hidden:true,
+      hidden: true,
       meta: { title: '商品列表' }
     },
     {
       path: 'compile',
       component: () => import('@/views/table/compile'),
       name: 'compile',
-      hidden:true,
+      hidden: true,
       meta: { title: '商品列表' }
     },
     {

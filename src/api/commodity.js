@@ -3,7 +3,7 @@ import qs from 'qs'
 
 // 表单初始化
 export function manageList(status) {
-  const data={
+  const data = {
     status
   }
   return request({
@@ -16,8 +16,8 @@ export function manageList(status) {
 }
 
 // 表单查询数据
-export function lookList(status,page,formInline) {
-  const data={
+export function lookList(status, page, formInline) {
+  const data = {
     page,
     status,
     prod_code: formInline.prod_code,
@@ -30,7 +30,7 @@ export function lookList(status,page,formInline) {
     vm_store_id: formInline.vm_store_id,
     up_time: formInline.up_time,
     submit_time: formInline.submit_time,
-    audit_time: formInline.audit_time,
+    audit_time: formInline.audit_time
   }
   return request({
     url: '/prod/list',
@@ -42,8 +42,8 @@ export function lookList(status,page,formInline) {
 }
 
 // 第一层表格数据
-export function tableList(status,page) {
-  const data={
+export function tableList(status, page) {
+  const data = {
     page,
     status
   }
@@ -57,8 +57,8 @@ export function tableList(status,page) {
 }
 
 // 第二次表格数据
-export function tableChild(vm_store_id,status,prod_id) {
-  const data={
+export function tableChild(vm_store_id, status, prod_id) {
+  const data = {
     prod_id,
     status,
     vm_store_id
@@ -74,7 +74,7 @@ export function tableChild(vm_store_id,status,prod_id) {
 
 // 表格查询获取的数据
 export function tableSearch(obj) {
-  const data={
+  const data = {
     id: obj.id,
     vm_store_product_id: obj.vm_store_product_id,
     status: obj.status
@@ -90,7 +90,7 @@ export function tableSearch(obj) {
 
 // 表格编辑获取商品信息
 export function shopMinxin(standard_category_id) {
-  const data={
+  const data = {
     standard_category_id
   }
   return request({
