@@ -106,7 +106,6 @@ const arr = {
       'k': 0,
       'sortable': true
     }
-
   ]
 }
 export default arr

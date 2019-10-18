@@ -152,3 +152,41 @@ export function storeList(status,page,formInline) {
     data: qs.stringify(data)
   })
 }
+
+// 顾客会员等级
+export function searchSet() {
+  return request({
+    url: '/member/search-set',
+    method: 'post',
+    baseURL: '/api',
+    headers: { 'content-Type': 'application/x-www-form-urlencoded' },
+  })
+}
+
+// 顾客会员等级
+export function memberList(type,page,formInline) {
+  const data = {
+    type,
+    page,
+    mobile: formInline.mobile,
+    name: formInline.name,
+    nickname: formInline.nickname,
+    cid: formInline.cid,
+    grade_code: formInline.grade_code,
+    buy_times_min: formInline.buy_times_min,
+    buy_times_max: formInline.buy_times_max,
+    price_min: formInline.price_min,
+    price_max: formInline.price_max,
+    lately_consume_time_start: formInline.lately_consume_time_start,
+    lately_consume_time_end: formInline.lately_consume_time_end,
+    first_consume_time_start: formInline.first_consume_time_start,
+    first_consume_time_end: formInline.first_consume_time_end,
+  }
+  return request({
+    url: '/member/member-list',
+    method: 'post',
+    baseURL: '/api',
+    headers: { 'content-Type': 'application/x-www-form-urlencoded' },
+    data: qs.stringify(data)
+  })
+}

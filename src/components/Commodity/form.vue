@@ -169,7 +169,6 @@ export default {
         })
       } else {
         basicMinxin().then(res => {
-          console.log(res.data, '----resssss')
           this.formSelect = res.data
           this.category = res.data.categories
           this.brand = res.data.brands
@@ -182,12 +181,8 @@ export default {
       const brr = []
       arr.push(this.formInline.type)
       this.formInline.delivery_type = arr
-      const start = new Date(this.formInline.date[0])
-        .toLocaleDateString()
-        .replace(/\//g, '-')
-      const end = new Date(this.formInline.date[1])
-        .toLocaleDateString()
-        .replace(/\//g, '-')
+      const start = new Date(this.formInline.date[0]).toLocaleDateString().replace(/\//g, '-')
+      const end = new Date(this.formInline.date[1]).toLocaleDateString().replace(/\//g, '-')
       if (this.formInline.date.length) {
         brr.push(start, end)
       }
