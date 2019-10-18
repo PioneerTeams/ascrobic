@@ -4,59 +4,59 @@ const obj = {
       'label': '姓名',
       'prop': 'user_name',
       'w': 100,
-      "sortable":false
+      'sortable': false
     }, {
       'label': '手机号',
       'prop': 'mobile',
       'w': 100,
-      "sortable":false
+      'sortable': false
     }, {
       'label': '角色',
       'prop': 'role',
       'w': 100,
-      "sortable":false
+      'sortable': false
     }, {
       'label': '所属店铺',
       'prop': 'store_name',
       'w': 100,
-      "sortable":false
+      'sortable': false
     }, {
       'label': '顾客账号',
       'prop': 'relation_user',
       'w': 100,
-      "sortable":false
+      'sortable': false
     }, {
       'label': '状态',
       'prop': 'status',
       'w': 100,
-      "sortable":false
+      'sortable': false
     }
   ],
   invitation: [
     {
       'label': '姓名',
       'prop': 'user_name',
-      "sortable":false
+      'sortable': false
     }, {
       'label': '手机号',
       'prop': 'mobile',
-      "sortable":false
+      'sortable': false
     }, {
       'label': '角色',
       'prop': 'role',
-      "sortable":false
+      'sortable': false
     }, {
       'label': '所属店铺',
       'prop': 'store_name',
-      "sortable":false
+      'sortable': false
     }, {
       'label': '邀请者',
       'prop': 'create_user_name',
-      "sortable":false
+      'sortable': false
     }, {
       'label': '发送时间',
       'prop': 'created_at',
-      "sortable":true
+      'sortable': true
     }
   ],
   role: [

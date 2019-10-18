@@ -2,10 +2,10 @@
   <div class="card-group">
     <el-form :inline="true" :model="formInline" class="demo-form-inline" label-width="90px">
       <el-form-item label="款号:">
-        <el-input v-model="formInline.prod_code" placeholder="请输入"></el-input>
+        <el-input v-model="formInline.prod_code" placeholder="请输入" />
       </el-form-item>
       <el-form-item label="商品名称:">
-        <el-input v-model="formInline.prod_name" placeholder="请输入"></el-input>
+        <el-input v-model="formInline.prod_name" placeholder="请输入" />
       </el-form-item>
       <el-form-item label="分类:">
         <el-select v-model="formInline.category_id" filterable placeholder="请选择">
@@ -19,7 +19,7 @@
               :key="item.id"
               :label="item.title"
               :value="item.value"
-            ></el-option>
+            />
           </el-option-group>
         </el-select>
       </el-form-item>
@@ -30,7 +30,7 @@
             :key="item.id"
             :label="item.name"
             :value="item.id"
-          ></el-option>
+          />
         </el-select>
       </el-form-item>
       <el-form-item label="商品来源:">
@@ -40,7 +40,7 @@
             :key="item.id"
             :label="item.name"
             :value="item.id"
-          ></el-option>
+          />
         </el-select>
       </el-form-item>
       <el-form-item label="商品类型:">
@@ -50,7 +50,7 @@
             :key="item.id"
             :label="item.name"
             :value="item.id"
-          ></el-option>
+          />
         </el-select>
       </el-form-item>
       <el-form-item label="配送方式:">
@@ -60,7 +60,7 @@
             :key="item.id"
             :label="item.name"
             :value="item.id"
-          ></el-option>
+          />
         </el-select>
       </el-form-item>
       <el-form-item label="店铺:">
@@ -71,13 +71,13 @@
               :key="item.id"
               :label="item.title"
               :value="item.value"
-            ></el-option>
+            />
           </el-option-group>
         </el-select>
       </el-form-item>
       <el-form-item
-        :label="activeName==4?'上架时间:':(activeName==1?'提交时间:':(activeName==3?'审核时间:':''))"
         v-show="activeName==3||activeName==1||activeName==4"
+        :label="activeName==4?'上架时间:':(activeName==1?'提交时间:':(activeName==3?'审核时间:':''))"
       >
         <el-date-picker
           v-model="formInline.date"
@@ -85,26 +85,26 @@
           range-separator="-"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
-        ></el-date-picker>
+        />
       </el-form-item>
-      <el-form-item label="下架原因:" v-show="activeName==5">
+      <el-form-item v-show="activeName==5" label="下架原因:">
         <el-select v-model="formInline.down_reason" placeholder="请选择">
           <el-option
             v-for="item in formSelect.down_reason"
             :key="item.id"
             :label="item.name"
             :value="item.id"
-          ></el-option>
+          />
         </el-select>
       </el-form-item>
-      <el-form-item label="供货商状态:" v-show="activeName==5">
+      <el-form-item v-show="activeName==5" label="供货商状态:">
         <el-select v-model="formInline.retailer_status" placeholder="请选择">
           <el-option
             v-for="item in formSelect.retailer_status"
             :key="item.id"
             :label="item.name"
             :value="item.id"
-          ></el-option>
+          />
         </el-select>
       </el-form-item>
       <el-form-item class="last-formItem">
@@ -116,8 +116,8 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from "vuex";
-import { manageList, tableList } from "@/api/commodity";
+import { mapState, mapMutations, mapActions } from 'vuex'
+import { manageList, tableList } from '@/api/commodity'
 
 export default {
   props: {
@@ -127,81 +127,81 @@ export default {
     return {
       formSelect: {},
       formInline: {
-        prod_code: "",
-        prod_name: "",
-        category_id: "",
-        brand_id: "",
-        prod_src: "",
-        prod_type: "",
-        type: "",
-        vm_store_id: "",
-        putaway: "",
+        prod_code: '',
+        prod_name: '',
+        category_id: '',
+        brand_id: '',
+        prod_src: '',
+        prod_type: '',
+        type: '',
+        vm_store_id: '',
+        putaway: '',
         date: [],
-        down_reason: "",
-        retailer_status: "",
+        down_reason: '',
+        retailer_status: '',
         up_time: [],
         submit_time: [],
         audit_time: []
       },
       num: 4
-    };
+    }
   },
   computed: {
-    ...mapState("commodity", ["list"])
+    ...mapState('commodity', ['list'])
   },
   created() {
-    this.getFormTable(this.formInline);
+    this.getFormTable(this.formInline)
   },
   mounted() {
-    this.getlist(this.activeName);
+    this.getlist(this.activeName)
   },
   methods: {
-    ...mapMutations("commodity", ["setForm"]),
-    ...mapActions("commodity", ["getFormTable"]),
+    ...mapMutations('commodity', ['setForm']),
+    ...mapActions('commodity', ['getFormTable']),
     getlist(num) {
       manageList(num).then(res => {
-        this.formSelect = res.data;
-      });
+        this.formSelect = res.data
+      })
     },
     onSubmit() {
-      const arr = [],
-        brr = [];
-      arr.push(this.formInline.type);
-      this.formInline.delivery_type = arr;
+      const arr = []
+      const brr = []
+      arr.push(this.formInline.type)
+      this.formInline.delivery_type = arr
       const start = new Date(this.formInline.date[0])
         .toLocaleDateString()
-        .replace(/\//g, "-");
+        .replace(/\//g, '-')
       const end = new Date(this.formInline.date[1])
         .toLocaleDateString()
-        .replace(/\//g, "-");
+        .replace(/\//g, '-')
       if (this.formInline.date.length) {
-        brr.push(start, end);
+        brr.push(start, end)
       }
 
       if (this.num === 4) {
-        this.formInline.up_time = brr;
+        this.formInline.up_time = brr
       } else if (this.num === 1) {
-        this.formInline.submit_time = brr;
+        this.formInline.submit_time = brr
       } else if (this.num === 3) {
-        this.formInline.audit_time = brr;
+        this.formInline.audit_time = brr
       }
-      this.setForm(this.formInline);
-      this.getFormTable(this.formInline);
+      this.setForm(this.formInline)
+      this.getFormTable(this.formInline)
     },
     resetForm(formName) {
-      let arr = Object.keys(this.formInline);
+      const arr = Object.keys(this.formInline)
       arr.forEach(item => {
-        this.formInline[item] = "";
-      });
+        this.formInline[item] = ''
+      })
     }
   },
   watch: {
     activeName(num) {
-      this.num = num;
-      this.getlist(num);
+      this.num = num
+      this.getlist(num)
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

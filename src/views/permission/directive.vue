@@ -40,7 +40,7 @@
           </div>
         </el-form>
       </div>
-      <tabs :tableData="shopArr" :list="list"/>
+      <tabs :table-data="shopArr" :list="list" />
     </div>
   </div>
 </template>
@@ -53,49 +53,49 @@ export default {
   props: {},
   data() {
     return {
-      activeName: "guide",
-        formInline: {
+      activeName: 'guide',
+      formInline: {
         mobile: '',
         store_id: '',
         role_id: '',
         relation_user_status: '',
         status: ''
       },
-      tableArr:[''],
-      guideDate:{ page: 1,scene_type: 2, store_type: 1 },
-      shopArr:[],
-      list:title.navshop
-    };
+      tableArr: [''],
+      guideDate: { page: 1, scene_type: 2, store_type: 1 },
+      shopArr: [],
+      list: title.navshop
+    }
   },
   created() {
     this.getStoreLists()
   },
   methods: {
-    async getStoreLists(){
-      let result = await getStoreList(this.guideDate)
+    async getStoreLists() {
+      const result = await getStoreList(this.guideDate)
       this.shopArr = result.list
       console.log(result)
     },
     onSubmit() {
       // 搜索
-      const obj = {};
+      const obj = {}
       for (const k in this.formInline) {
         if (this.formInline[k]) {
-          obj[k] = this.formInline[k];
+          obj[k] = this.formInline[k]
         }
       }
-      this.$emit("sechfn", Object.assign(this.fromdata, obj));
+      this.$emit('sechfn', Object.assign(this.fromdata, obj))
     },
     onReset() {
       // 重置表单
-      const arr = Object.keys(this.formInline);
+      const arr = Object.keys(this.formInline)
       arr.forEach(item => {
-        this.formInline[item] = "";
-      });
-      Object.assign(this.fromdata, this.formInline);
+        this.formInline[item] = ''
+      })
+      Object.assign(this.fromdata, this.formInline)
     }
   }
-};
+}
 </script>
 <style scoped lang="scss">
 .management {
