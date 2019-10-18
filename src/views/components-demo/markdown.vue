@@ -259,7 +259,6 @@ export default {
               {
                 name: '店仓',
                 id: 1
-
               }
             ]
           },
@@ -349,7 +348,25 @@ export default {
       // window.localStorage.setItem("sub_order_number",row.sub_number)
       this.$router.push(`markdown/detail/${row.sub_number}`)
     },
-    reset() {},
+    reset() {
+      this.form = {
+        shopOrderNumber: '',
+        name: '',
+        tel: '',
+        orderType: '',
+        orderNumber: '',
+        sourceType: '',
+        floor: '',
+        store: '',
+        brand: '',
+        goodsNumber: '',
+        goodsName: '',
+        orderTime: '',
+        paymentTime: ''
+      }
+
+      this.getSubOrder(this.index, 1)
+    },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)
     },
@@ -384,9 +401,27 @@ export default {
       return result
     },
     async getSubOrder(index = 0, page = 1) {
-      const { shopOrderNumber, name, tel, orderType, orderNumber, sourceType, store, floor, brand, goodsNumber, goodsName, orderTime, paymentTime } = this.form
-      const order_pay_time = paymentTime.length ? paymentTime.map((item) => item.toLocaleDateString().replace(/\//g, '-')) : []
-      const submit_time = orderTime.length ? orderTime.map((item) => item.toLocaleDateString().replace(/\//g, '-')) : []
+      const {
+        shopOrderNumber,
+        name,
+        tel,
+        orderType,
+        orderNumber,
+        sourceType,
+        store,
+        floor,
+        brand,
+        goodsNumber,
+        goodsName,
+        orderTime,
+        paymentTime
+      } = this.form
+      const order_pay_time = paymentTime.length
+        ? paymentTime.map(item => item.toLocaleDateString().replace(/\//g, '-'))
+        : []
+      const submit_time = orderTime.length
+        ? orderTime.map(item => item.toLocaleDateString().replace(/\//g, '-'))
+        : []
       console.log(orderType, 'orderTypez')
       const data = {
         org_id: 61500,
@@ -406,7 +441,6 @@ export default {
         prod_name: goodsName,
         submit_time: JSON.stringify(submit_time),
         order_pay_time: JSON.stringify(order_pay_time)
-
       }
       const result = await this.subOrderListAction(data)
       console.log(result, 'lllll')
